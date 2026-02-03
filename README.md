@@ -5,7 +5,7 @@
 
 # 《存在的定义及世界统一原理》
  https://philpapers.org/rec/GAOXPO
- 
+  
 # 这是世界演化的最小逻辑单元
 # 也是世界各个层面的通用逻辑。
   
@@ -109,8 +109,19 @@
 	  
 	  https://www.youtube.com/channel/UC4vW809nsqor9V0cbWr7e2w
 	  
-	  
-	  
-	  
 
 	  
+# 关于收益
+
+《AI 时代知识创造者的伙伴协作模式》
+
+https://philpapers.org/rec/GAOATK
+
+希望您在gitee和github上的贡献都可以得到资助
+
+更希望我们能更快的进入AI协作的时代，让多平台的AI接入gitee和github
+
+未来您可能不用使用gitee和github这两个平台，直接与AI对话，便可以更新在gitee和github的知识体系。
+
+您也可以与AI对话的过程中获得收益。
+
