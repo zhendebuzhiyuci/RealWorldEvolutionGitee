@@ -1,9 +1,16 @@
 # Welcome to RealWorldEvolution  
+
+新人的提交都在PreSubmission分支
+
 # 欢迎来到真实世界的演化
+
  我们刚刚使用github，有失误之处还望理解，感谢大家的帮助
 
 
-# 《存在的定义及世界统一原理》
+# 《存在的定义及世界统一原理》 
+
+ 先阅读论文文档
+ 
  https://philpapers.org/rec/GAOXPO
   
 # 这是世界演化的最小逻辑单元
