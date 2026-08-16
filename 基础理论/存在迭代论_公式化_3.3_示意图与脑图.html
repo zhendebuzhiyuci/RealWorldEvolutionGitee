@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>存在迭代论 3.3｜世界底层公理示意图与脑图</title>
+  <style>
+    :root {
+      --ink: #163246;
+      --muted: #5d7485;
+      --blue: #216f8f;
+      --blue-soft: #e5f1f5;
+      --teal: #2e7a68;
+      --teal-soft: #e3f1eb;
+      --gold: #bd7c18;
+      --gold-soft: #fbefd8;
+      --purple: #6c5795;
+      --purple-soft: #eee9f7;
+      --red: #b2554c;
+      --red-soft: #f8e7e4;
+      --paper: #f7f4ec;
+      --paper-2: #fffdf8;
+      --line: rgba(22,50,70,.14);
+      --shadow: 0 18px 45px rgba(26, 45, 61, .10);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%, rgba(33,111,143,.10), transparent 30rem),
+        radial-gradient(circle at 96% 18%, rgba(108,87,149,.09), transparent 30rem),
+        var(--paper);
+      font-family: "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    a { color: inherit; }
+    button { font: inherit; }
+    .wrap { width: min(1240px, calc(100% - 32px)); margin: 0 auto; }
+    .skip { position: absolute; left: -9999px; }
+    .skip:focus { left: 12px; top: 12px; z-index: 10; padding: 8px 12px; background: var(--paper-2); border-radius: 8px; }
+    .hero { padding: 68px 0 46px; border-bottom: 1px solid var(--line); }
+    .eyebrow, .kicker { color: var(--blue); font-size: .84rem; font-weight: 800; letter-spacing: .12em; }
+    .eyebrow { display: flex; gap: .65rem; align-items: center; margin: 0 0 1.1rem; }
+    .eyebrow::before { content: ""; width: 44px; height: 3px; background: var(--blue); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: .7rem; font-size: clamp(2.6rem, 7vw, 5.6rem); line-height: 1.02; letter-spacing: -.06em; }
+    h2 { margin-bottom: .7rem; font-size: clamp(1.65rem, 3vw, 2.6rem); line-height: 1.2; letter-spacing: -.03em; }
+    h3 { line-height: 1.35; }
+    .subtitle { max-width: 900px; margin: 0; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.28rem); overflow-wrap: anywhere; }
+    .meta { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.5rem; }
+    .tag { display: inline-flex; align-items: center; min-height: 32px; padding: .28rem .76rem; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,253,248,.7); color: var(--muted); font-size: .84rem; }
+    .nav-wrap { position: sticky; top: 0; z-index: 5; background: rgba(247,244,236,.90); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+    .nav { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; min-height: 54px; }
+    .nav a, .nav button { border: 0; background: transparent; color: var(--muted); text-decoration: none; cursor: pointer; padding: .44rem .64rem; border-radius: 8px; font-size: .84rem; }
+    .nav a:hover, .nav a:focus-visible, .nav button:hover, .nav button:focus-visible { color: var(--blue); background: var(--blue-soft); outline: none; }
+    main { padding: 22px 0 64px; }
+    section { margin-top: 22px; padding: clamp(24px, 4vw, 44px); border: 1px solid var(--line); border-radius: var(--radius); background: rgba(255,253,248,.88); box-shadow: var(--shadow); scroll-margin-top: 74px; }
+    .lead { max-width: 930px; margin-bottom: 1.5rem; color: var(--muted); }
+    .definition { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr); gap: 26px; min-width: 0; background: var(--ink); color: #fff; border: 0; }
+    .definition > * { min-width: 0; }
+    .definition .kicker { color: #a8d9e7; }
+    .definition blockquote { margin: 1rem 0 0; font-family: "STKaiti", "KaiTi", serif; font-size: clamp(1.8rem, 3.6vw, 3.1rem); line-height: 1.25; overflow-wrap: anywhere; }
+    .formula-box { align-self: stretch; padding: 22px; border: 1px solid rgba(255,255,255,.18); border-radius: 16px; background: rgba(255,255,255,.08); }
+    .formula { margin-top: .8rem; padding: .95rem 1rem; border-left: 3px solid #a8d9e7; background: rgba(0,0,0,.12); color: #effaff; font-family: "Cambria Math", "Times New Roman", serif; font-size: 1.04rem; overflow-wrap: anywhere; }
+    .formula small { display: block; margin-top: .7rem; color: rgba(255,255,255,.70); font-family: inherit; font-size: .78rem; }
+    .pill-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+    .pill { padding: .32rem .64rem; border-radius: 999px; background: var(--blue-soft); color: var(--blue); font-size: .82rem; font-weight: 700; }
+    .pill.gold { background: var(--gold-soft); color: var(--gold); }
+    .pill.teal { background: var(--teal-soft); color: var(--teal); }
+    .pill.purple { background: var(--purple-soft); color: var(--purple); }
+    .premises { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .premise { padding: 18px; border-top: 4px solid var(--blue); border-radius: 14px; background: var(--blue-soft); }
+    .premise:nth-child(2) { border-top-color: var(--gold); background: var(--gold-soft); }
+    .premise:nth-child(3) { border-top-color: var(--teal); background: var(--teal-soft); }
+    .premise h3 { margin-bottom: .35rem; font-size: 1.05rem; }
+    .premise p { margin: 0; color: var(--muted); font-size: .92rem; }
+    .spine { overflow-x: auto; padding: 5px 2px 14px; }
+    .spine-track { display: grid; grid-template-columns: repeat(9, minmax(132px, 1fr)); gap: 14px; min-width: 1140px; }
+    .spine-node { position: relative; min-height: 134px; padding: 15px; border: 1px solid var(--line); border-radius: 16px; background: var(--paper-2); }
+    .spine-node::after { content: "→"; position: absolute; right: -18px; top: 50%; transform: translateY(-50%); color: var(--blue); font-size: 1.3rem; font-weight: 800; }
+    .spine-node:last-child::after { display: none; }
+    .spine-node:nth-child(2), .spine-node:nth-child(3) { border-top: 4px solid var(--gold); }
+    .spine-node:nth-child(4), .spine-node:nth-child(5), .spine-node:nth-child(6) { border-top: 4px solid var(--blue); }
+    .spine-node:nth-child(7), .spine-node:nth-child(8) { border-top: 4px solid var(--teal); }
+    .spine-node:nth-child(9) { border-top: 4px solid var(--purple); }
+    .spine-no { color: var(--blue); font-size: .75rem; font-weight: 800; letter-spacing: .08em; }
+    .spine-node h3 { margin: .35rem 0 .35rem; font-size: .98rem; }
+    .spine-node p { margin: 0; color: var(--muted); font-size: .82rem; line-height: 1.45; }
+    .axiom-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .axiom-card { min-height: 160px; padding: 16px; text-align: left; border: 1px solid var(--line); border-radius: 15px; background: var(--paper-2); color: var(--ink); cursor: pointer; }
+    .axiom-card:hover, .axiom-card:focus-visible, .axiom-card[aria-pressed="true"] { border-color: var(--blue); background: var(--blue-soft); outline: none; }
+    .axiom-card[aria-pressed="true"] { box-shadow: inset 0 0 0 2px rgba(33,111,143,.16); }
+    .axiom-card .a-no { color: var(--blue); font-weight: 800; font-size: .82rem; }
+    .axiom-card h3 { margin: .4rem 0 .35rem; font-size: 1rem; }
+    .axiom-card p { margin: 0; color: var(--muted); font-size: .82rem; line-height: 1.48; }
+    .detail-panel { margin-top: 16px; padding: 20px; border-radius: 16px; background: var(--ink); color: #fff; }
+    .detail-panel h3 { margin-bottom: .35rem; color: #fff; }
+    .detail-panel p { margin: 0; color: rgba(255,255,255,.78); }
+    .detail-panel .formula { margin-top: 12px; }
+    .lemma-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; min-width: 0; }
+    .lemma-card { min-width: 0; padding: 17px; border-radius: 15px; border: 1px solid var(--line); background: var(--paper-2); overflow-wrap: anywhere; }
+    .lemma-card:nth-child(1) { border-top: 4px solid var(--gold); }
+    .lemma-card:nth-child(2) { border-top: 4px solid var(--blue); }
+    .lemma-card:nth-child(3) { border-top: 4px solid var(--red); }
+    .lemma-card:nth-child(4) { border-top: 4px solid var(--teal); }
+    .lemma-card:nth-child(5) { border-top: 4px solid var(--purple); }
+    .lemma-card h3 { margin: 0 0 .45rem; font-size: 1rem; }
+    .lemma-card p { margin: 0; color: var(--muted); font-size: .84rem; }
+    .lemma-card ul { margin: .55rem 0 0; padding-left: 1.15rem; color: var(--muted); font-size: .82rem; }
+    .rule-strip { margin-top: 16px; padding: 14px 18px; border-left: 4px solid var(--purple); background: var(--purple-soft); color: var(--muted); }
+    .rule-strip strong { color: var(--purple); }
+    .svg-wrap { margin-top: 1rem; padding: 12px; border-radius: 18px; background: linear-gradient(145deg, rgba(229,241,245,.74), rgba(255,253,248,.35)); }
+    svg { display: block; width: 100%; height: auto; }
+    .gen-svg text, .network-svg text { font-family: "Microsoft YaHei", Arial, sans-serif; fill: var(--ink); }
+    .gen-svg .ring { fill: none; stroke: #c8dce3; stroke-width: 2; stroke-dasharray: 7 8; }
+    .gen-svg .node rect { stroke-width: 1.8; rx: 16; }
+    .gen-svg .node text { text-anchor: middle; font-weight: 800; font-size: 18px; }
+    .gen-svg .node .sub { font-size: 13px; font-weight: 400; fill: var(--muted); }
+    .gen-svg .n1 rect { fill: var(--gold-soft); stroke: var(--gold); }
+    .gen-svg .n2 rect { fill: var(--blue-soft); stroke: var(--blue); }
+    .gen-svg .n3 rect { fill: var(--teal-soft); stroke: var(--teal); }
+    .gen-svg .n4 rect { fill: var(--purple-soft); stroke: var(--purple); }
+    .gen-svg .n5 rect { fill: var(--red-soft); stroke: var(--red); }
+    .gen-svg .arrow { fill: none; stroke: var(--blue); stroke-width: 3; marker-end: url(#arrow); }
+    .gen-svg .feedback { fill: none; stroke: var(--purple); stroke-width: 2.5; stroke-dasharray: 8 7; marker-end: url(#arrow-p); }
+    .gen-svg .caption { text-anchor: middle; fill: var(--muted); font-size: 14px; }
+    .network-svg .edge { fill: none; stroke: var(--blue); stroke-width: 2.4; marker-end: url(#n-arrow); }
+    .network-svg .back { fill: none; stroke: var(--purple); stroke-width: 2.2; stroke-dasharray: 7 6; marker-end: url(#n-arrow-p); }
+    .network-svg .node rect { stroke-width: 1.5; rx: 14; }
+    .network-svg .node text { text-anchor: middle; font-size: 16px; font-weight: 800; }
+    .network-svg .node .sub { font-size: 11px; font-weight: 400; fill: var(--muted); }
+    .network-svg .matter rect { fill: var(--blue-soft); stroke: var(--blue); }
+    .network-svg .life rect { fill: var(--teal-soft); stroke: var(--teal); }
+    .network-svg .society rect { fill: var(--gold-soft); stroke: var(--gold); }
+    .network-svg .knowledge rect { fill: var(--purple-soft); stroke: var(--purple); }
+    .network-svg .economy rect { fill: var(--red-soft); stroke: var(--red); }
+    .network-svg .label { fill: var(--muted); font-size: 13px; }
+    .bridge-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+    .bridge-card { padding: 15px; border-radius: 13px; background: var(--paper-2); border: 1px solid var(--line); }
+    .bridge-card b { display: block; margin-bottom: .3rem; color: var(--blue); font-size: .88rem; }
+    .bridge-card p { margin: 0; color: var(--muted); font-size: .8rem; }
+    .limits { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+    .limit { padding: 18px; border-radius: 15px; background: var(--teal-soft); }
+    .limit.warning { background: var(--gold-soft); }
+    .limit h3 { margin-bottom: .45rem; font-size: 1rem; }
+    .limit ul { margin: 0; padding-left: 1.15rem; color: var(--muted); font-size: .85rem; }
+    .mindmap { display: grid; grid-template-columns: minmax(0, 1fr) 190px minmax(0, 1fr); gap: 18px; align-items: stretch; margin-top: 20px; }
+    .mind-col { display: grid; gap: 10px; }
+    .hub { align-self: center; display: grid; place-items: center; min-height: 190px; padding: 18px; border-radius: 50%; background: var(--ink); color: #fff; text-align: center; box-shadow: 0 12px 32px rgba(22,50,70,.22); }
+    .hub strong { display: block; font-family: "STKaiti", "KaiTi", serif; font-size: 1.55rem; }
+    .hub span { display: block; margin-top: .35rem; color: rgba(255,255,255,.72); font-size: .82rem; }
+    .branch { border: 1px solid var(--line); border-radius: 14px; background: var(--paper-2); overflow: hidden; }
+    .branch summary { display: grid; grid-template-columns: 32px 1fr 20px; gap: 9px; align-items: center; padding: 11px 13px; cursor: pointer; list-style: none; font-weight: 800; }
+    .branch summary::-webkit-details-marker { display: none; }
+    .branch summary:hover, .branch summary:focus-visible { background: var(--blue-soft); outline: none; }
+    .branch-no { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; background: var(--blue-soft); color: var(--blue); font-size: .78rem; }
+    .branch summary::after { content: "⌄"; color: var(--muted); }
+    .branch[open] summary::after { transform: rotate(180deg); }
+    .branch-detail { padding: 0 14px 13px 54px; color: var(--muted); font-size: .82rem; }
+    .branch-detail ul { margin: .2rem 0 0; padding-left: 1rem; }
+    .loop-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr); gap: 18px; align-items: start; }
+    .loop-svg .ring { fill: none; stroke: #c8dce3; stroke-width: 2; stroke-dasharray: 7 8; }
+    .loop-svg .edge { fill: none; stroke: var(--blue); stroke-width: 3; marker-end: url(#loop-arrow); }
+    .loop-svg .node rect { stroke-width: 1.5; rx: 15; }
+    .loop-svg .node text { text-anchor: middle; font-size: 17px; font-weight: 800; }
+    .loop-svg .node .sub { font-size: 12px; font-weight: 400; fill: var(--muted); }
+    .loop-svg .l1 rect, .loop-svg .l7 rect { fill: var(--blue-soft); stroke: var(--blue); }
+    .loop-svg .l2 rect, .loop-svg .l6 rect { fill: var(--gold-soft); stroke: var(--gold); }
+    .loop-svg .l3 rect, .loop-svg .l5 rect { fill: var(--teal-soft); stroke: var(--teal); }
+    .loop-svg .l4 rect { fill: var(--purple-soft); stroke: var(--purple); }
+    .gate { padding: 20px; border-radius: 16px; background: var(--ink); color: #fff; }
+    .gate h3 { margin-bottom: .4rem; }
+    .gate .formula { margin: 12px 0; }
+    .decision-row { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .decision { padding: .32rem .55rem; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; color: rgba(255,255,255,.82); font-size: .78rem; }
+    .t0t1 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .t0t1 div { padding: 11px; border-radius: 10px; background: rgba(255,255,255,.08); color: rgba(255,255,255,.78); font-size: .8rem; }
+    .concept-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+    .concept { padding: 15px; border-left: 4px solid var(--blue); border-radius: 10px; background: var(--blue-soft); }
+    .concept:nth-child(4n+2) { border-left-color: var(--gold); background: var(--gold-soft); }
+    .concept:nth-child(4n+3) { border-left-color: var(--teal); background: var(--teal-soft); }
+    .concept:nth-child(4n+4) { border-left-color: var(--purple); background: var(--purple-soft); }
+    .concept strong { display: block; margin-bottom: .25rem; }
+    .concept span { color: var(--muted); font-size: .82rem; }
+    footer { padding: 22px 0 42px; border-top: 1px solid var(--line); color: var(--muted); font-size: .8rem; }
+    .footer-row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    @media (max-width: 1120px) {
+      .axiom-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .lemma-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .bridge-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .concept-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 820px) {
+      .definition, .loop-grid { grid-template-columns: 1fr; }
+      .premises, .lemma-grid, .limits { grid-template-columns: 1fr; }
+      .mindmap { grid-template-columns: 1fr; }
+      .hub { order: -1; min-height: 120px; border-radius: 18px; }
+    }
+    @media (max-width: 620px) {
+      .hero { padding: 45px 0 32px; }
+      .nav { overflow-x: auto; flex-wrap: nowrap; }
+      .axiom-grid, .bridge-grid, .concept-grid { grid-template-columns: 1fr; }
+      section { padding: 22px 18px; border-radius: 17px; }
+      .spine-track { min-width: 1050px; }
+      .spine, .network-holder { width: 100%; max-width: 100%; }
+      .network-svg { min-width: 760px; }
+      .svg-wrap.network-holder { overflow-x: auto; }
+    }
+    @media print {
+      @page { size: A4 landscape; margin: 10mm; }
+      *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      body { background: var(--paper); }
+      .nav-wrap { display: none; }
+      .hero { break-after: page; }
+      section { break-before: page; box-shadow: none; margin-top: 0; padding: 28px; }
+      section:first-of-type { break-before: auto; }
+      .axiom-card, .branch { break-inside: avoid; }
+      .branch-detail { display: block !important; }
+      .spine { overflow: visible; }
+      .spine-track { min-width: 0; }
+      .premises, .axiom-grid, .lemma-grid, .bridge-grid, .limits, .concept-grid { gap: 8px; }
+      .premise, .axiom-card, .lemma-card, .bridge-card, .limit, .concept { padding: 12px; }
+      .axiom-card { min-height: 0; }
+      .detail-panel, .gate { padding: 14px; }
+      .svg-wrap { margin-top: .6rem; padding: 8px; }
+      .rule-strip { margin-top: 10px; padding: 10px 14px; }
+      #generation .gen-svg { max-height: 410px; }
+      #lemmas .lemma-card { padding: 9px; }
+      #lemmas .lemma-card p { font-size: .78rem; }
+      #lemmas .lemma-card ul { margin-top: .3rem; font-size: .74rem; }
+      #lemmas .rule-strip { margin-top: 6px; padding: 7px 10px; font-size: .76rem; }
+      #network .network-svg { max-height: 180px; }
+      #network { padding-bottom: 0; }
+      #network .bridge-grid { margin-top: 8px; }
+      #network .limits { margin-top: 2px; }
+      #network .bridge-card { padding: 8px; }
+      #network .bridge-card p { font-size: .72rem; line-height: 1.35; }
+      #network .limit { padding: 6px; }
+      #network .limit h3 { margin-bottom: .25rem; }
+      #network .limit ul { font-size: .7rem; line-height: 1.25; }
+      #mindmap .mindmap { gap: 10px; margin-top: 12px; }
+      #mindmap .hub { min-height: 145px; padding: 12px; }
+      #mindmap .branch summary { padding: 7px 9px; }
+      #mindmap .branch-detail { padding: 0 10px 8px 42px; }
+      #self-loop .loop-svg { max-height: 340px; }
+      #self-loop .gate { padding: 10px; }
+      #self-loop .gate .formula { margin: 8px 0; padding: .6rem .7rem; }
+      #self-loop .decision-row { gap: .25rem; }
+      #self-loop .t0t1 { gap: 6px; margin-top: 8px; }
+      #self-loop .t0t1 div { padding: 7px; font-size: .74rem; }
+      #self-loop .rule-strip { margin-top: 6px; padding: 7px 10px; font-size: .78rem; }
+      footer { padding-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳到主要内容</a>
+  <header class="hero">
+    <div class="wrap">
+      <p class="eyebrow">3.3 理论可视化 · 自迭代闭环修正版</p>
+      <h1>存在迭代论</h1>
+      <p class="subtitle">把“相对性、平等、过程与历史”的进入条件，连接到七条基础公理、31 条引理、跨层生成网络，以及理论自身的修订与回退。</p>
+      <div class="meta" aria-label="文档信息">
+        <span class="tag">世界底层公理体系</span>
+        <span class="tag">最大包涵 · 最小规则</span>
+        <span class="tag">对象 · 实体 · 关系</span>
+        <span class="tag">3.2 → 3.3 自迭代闭环</span>
+      </div>
+    </div>
+  </header>
+  <div class="nav-wrap">
+    <nav class="nav wrap" aria-label="页面导航">
+      <a href="#definition">核心定义</a><a href="#spine">总流程</a><a href="#axioms">七公理</a><a href="#lemmas">引理链</a><a href="#network">跨层网络</a><a href="#mindmap">脑图</a><a href="#self-loop">自迭代</a>
+      <button type="button" id="printBtn">打印</button>
+    </nav>
+  </div>
+  <main id="main" class="wrap">
+    <section id="definition" class="definition" aria-labelledby="definition-title">
+      <div>
+        <div class="kicker">理论轴心</div>
+        <h2 id="definition-title">存在不是静态物，而是被持续实现的过程系统</h2>
+        <blockquote>“存在是与外界保持相互作用、保持持续不断复现的过程系统。”</blockquote>
+        <div class="pill-row"><span class="pill">对象</span><span class="pill gold">实体</span><span class="pill teal">关系</span><span class="pill purple">都可进入候选存在域</span></div>
+      </div>
+      <div class="formula-box">
+        <strong>基础存在判据</strong>
+        <div class="formula">Ex<sub>(λ,J)</sub>(Σ)=1 ⇔ β<sub>(λ,J)</sub>(Σ)≥β<sub>0</sub> ∧ Q<sub>J</sub>(Σ)≥q<sub>0</sub> ∧ A<sub>J</sub>(Σ,E)=1<small>边界可区分 · 关键组织持续复现 · 原则上存在可留下差异的作用通道</small></div>
+        <p style="margin:0;color:rgba(255,255,255,.74);font-size:.84rem;">最大包涵扩大可泛化对象，最小规则减少不必要的底层假设；具体领域的变量、量纲和阈值必须下沉到领域模型。</p>
+      </div>
+    </section>
+
+    <section id="premise" aria-labelledby="premise-title">
+      <div class="kicker">00 · 进入理论之前</div>
+      <h2 id="premise-title">先规定认识立场，再定义存在</h2>
+      <p class="lead">3.3 明确守住初稿的先后次序：三项前提不是存在定义的替代物，而是我们开始认识世界时必须面对的现实、客观要求与动态视角。</p>
+      <div class="premises">
+        <article class="premise"><h3>相对性：现实起点</h3><p>人由世界形成，又处在世界内部认识世界。任何命题都要说明参照关系 r、尺度 λ、时间窗 J 与误差 ε。</p></article>
+        <article class="premise"><h3>平等：去除中心偏见</h3><p>去除人类中心主义和对象等级偏见，让对象、实体、关系获得同等研究资格；“存在即合理”只表示先追究其生成条件。</p></article>
+        <article class="premise"><h3>过程与历史：动态视角</h3><p>把事物放回生成、维持、变化、终止的路径中观察；同一性是关键组织约束在连续更新中被实现。</p></article>
+      </div>
+      <div class="rule-strip"><strong>前提联合约束：</strong>面对相对现实 + 以平等去除偏见 + 在过程和历史中观察 → 才进入存在定义。</div>
+    </section>
+
+    <section id="spine" aria-labelledby="spine-title">
+      <div class="kicker">01 · 理论总流程</div>
+      <h2 id="spine-title">从认识条件到世界递归网络</h2>
+      <p class="lead">横向滚动可查看完整生成主线。公理统一的是“生成问题的语法”，不是各领域共享一条具体运动方程。</p>
+      <div class="spine" aria-label="存在迭代论理论主线">
+        <div class="spine-track">
+          <article class="spine-node"><div class="spine-no">前提 1</div><h3>相对性</h3><p>命题必须带参照与边界条件。</p></article>
+          <article class="spine-node"><div class="spine-no">前提 2</div><h3>平等</h3><p>对象、实体、关系同一形式资格。</p></article>
+          <article class="spine-node"><div class="spine-no">前提 3</div><h3>过程与历史</h3><p>从形成、维持和终止中看存在。</p></article>
+          <article class="spine-node"><div class="spine-no">定义</div><h3>存在</h3><p>Σ=(X,B,C,F,Γ)，开放的过程系统。</p></article>
+          <article class="spine-node"><div class="spine-no">A1—A7</div><h3>基础公理</h3><p>关系索引、身份、证据、开放、响应、产物、保留。</p></article>
+          <article class="spine-node"><div class="spine-no">L1—L31</div><h3>引理推导</h3><p>认知、存在、不完美、周期、迭代与跨层闭合。</p></article>
+          <article class="spine-node"><div class="spine-no">定理</div><h3>新存在生成</h3><p>关系产物跨越 β、Q、A 阈值成为上层存在。</p></article>
+          <article class="spine-node"><div class="spine-no">网络</div><h3>世界递归</h3><p>分支、反馈、竞争、合作与重组并存。</p></article>
+          <article class="spine-node"><div class="spine-no">A7 元层</div><h3>理论自迭代</h3><p>差异输入 → 候选 → 检验 → 版本与回退。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="axioms" aria-labelledby="axioms-title">
+      <div class="kicker">02 · 基础公理</div>
+      <h2 id="axioms-title">七条最小生成链</h2>
+      <p class="lead">点击任意公理，查看它在整个体系中的作用。七条公理不是七种领域定律，而是跨对象、实体和关系共同保留的最小接口。</p>
+      <div class="axiom-grid" role="list" aria-label="七条基础公理">
+        <button class="axiom-card" type="button" data-axiom="A1" aria-pressed="true"><span class="a-no">A1</span><h3>关系索引</h3><p>属性通过对象—参照系统的作用通道被确定。</p></button>
+        <button class="axiom-card" type="button" data-axiom="A2" aria-pressed="false"><span class="a-no">A2</span><h3>过程—历史同一性</h3><p>关键组织约束在连续更新中被复现。</p></button>
+        <button class="axiom-card" type="button" data-axiom="A3" aria-pressed="false"><span class="a-no">A3</span><h3>相互作用证据</h3><p>经验存在必须原则上能在关系或记录中留下差异。</p></button>
+        <button class="axiom-card" type="button" data-axiom="A4" aria-pressed="false"><span class="a-no">A4</span><h3>有限开放</h3><p>有限系统依赖环境、边界条件、历史输入或真实作用。</p></button>
+        <button class="axiom-card" type="button" data-axiom="A5" aria-pressed="false"><span class="a-no">A5</span><h3>差异—响应</h3><p>只有进入 Γ 且能改变 F 输出的差异才驱动本轮变化。</p></button>
+        <button class="axiom-card" type="button" data-axiom="A6" aria-pressed="false"><span class="a-no">A6</span><h3>关系产物</h3><p>真实作用改变参与者、关系或后续概率，就产生可描述产物 p。</p></button>
+        <button class="axiom-card" type="button" data-axiom="A7" aria-pressed="false"><span class="a-no">A7</span><h3>迭代保留</h3><p>作用结果改变下一轮状态、边界、规则或通道并被选择保留。</p></button>
+      </div>
+      <div class="detail-panel" aria-live="polite"><h3 id="axiom-detail-title">A1 · 关系索引公理</h3><p id="axiom-detail-text">任何可检验的对象属性，都通过对象与参照系统之间的相互作用通道被确定，并相对于尺度、时间窗和误差范围表述。</p><div class="formula" id="axiom-detail-formula">y<sub>(Σ|r)</sub><sup>λ</sup>(t)=M<sub>r</sub><sup>λ</sup>[x<sub>Σ</sub>(t),Γ<sub>(Σr)</sub>(t)]+η(t)</div></div>
+    </section>
+
+    <section id="lemmas" aria-labelledby="lemmas-title">
+      <div class="kicker">03 · 引理推导</div>
+      <h2 id="lemmas-title">31 条引理压缩成五组检查任务</h2>
+      <p class="lead">引理不是无条件的宏大结论，而是由公理和附加条件推出的“在什么条件下能够得到什么”。</p>
+      <div class="lemma-grid">
+        <article class="lemma-card"><h3>检验一 · 认知相对性</h3><p>L1—L3：命题必须关系化；认知域受通道、分辨率和时间窗限制；知识与理论都必须允许可作用差异进入下一版本。</p><ul><li>P(Σ|r,λ,J,ε)</li><li>不把当前版本绝对化</li></ul></article>
+        <article class="lemma-card"><h3>检验二 · 定义存在</h3><p>L4—L7：相互作用是经验入口；存在判据是 β、Q、A 的合取；内部组织维持关键约束；复现的是组织，不是全部材料。</p><ul><li>β≥β₀ ∧ Q≥q₀ ∧ A=1</li><li>当前无信号不等于绝对不存在</li></ul></article>
+        <article class="lemma-card"><h3>检验三—四 · 不完美与周期</h3><p>L8—L17：有限系统非闭合；差异经过 Γ 和 F 才驱动变化；复现度、特征周期、惯性、改变阻力和生命期需要分别量化。</p><ul><li>频率 ≠ 稳定性 ≠ 惯性</li><li>不预设全局完美终点</li></ul></article>
+        <article class="lemma-card"><h3>检验五 · 迭代演化</h3><p>L18—L26：关系产物可能形成上层存在；上层反向改变下层；同频只降低共同复现成本，不自动带来能量或稳定性；竞争与合作并生。</p><ul><li>p → Σ<sup>(ℓ+1)</sup></li><li>分支结果允许并存</li></ul></article>
+        <article class="lemma-card"><h3>L27—L31 · 跨层与自迭代</h3><p>每一条相邻桥接都要给出 Γ、H、I、B、C、F、Θ、Ψ；跨层解释要闭合；理论自身也要完成可追溯、可检验、可回退的闭环。</p><ul><li>Closure<sub>T</sub>=Trace∧Locate∧Generate∧Compare∧Test∧Decide∧Version∧Rollback</li></ul></article>
+      </div>
+      <div class="rule-strip"><strong>严格边界：</strong>“高频到低频”“同频”“环境兼容”“惯性”“生命期”都必须在具体层级、时间单位、复现指标和作用网络中重新定义，不能用音乐同频或表面相似替代模型。</div>
+    </section>
+
+    <section id="generation" aria-labelledby="generation-title">
+      <div class="kicker">04 · 生成定理</div>
+      <h2 id="generation-title">关系产物如何成为新的存在</h2>
+      <p class="lead">不是“数量一多就自动涌现”，而是关系产物在后续轮次中被保留，并跨越边界、复现和作用能力的判据阈值。</p>
+      <div class="svg-wrap">
+        <svg class="gen-svg" viewBox="0 0 1000 520" role="img" aria-labelledby="gen-title gen-desc">
+          <title id="gen-title">存在迭代生成定理的反馈环</title><desc id="gen-desc">下层存在经相互作用产生关系产物，关系产物通过保留和存在判据成为新层级存在，新存在再反馈到原有系统的环境、边界和转移规则。</desc>
+          <defs><marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#216f8f"/></marker><marker id="arrow-p" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#6c5795"/></marker></defs>
+          <ellipse class="ring" cx="500" cy="255" rx="405" ry="205"/>
+          <path class="arrow" d="M245 150 C315 94, 367 86, 435 112"/><path class="arrow" d="M565 112 C648 92, 704 117, 752 164"/><path class="arrow" d="M801 254 C780 330, 716 365, 644 382"/><path class="arrow" d="M450 396 C360 414, 282 386, 227 322"/>
+          <path class="feedback" d="M650 430 C540 494, 360 490, 305 350"/>
+          <g class="node n1" transform="translate(105,105)"><rect width="210" height="92"/><text x="105" y="38">下层存在</text><text class="sub" x="105" y="65">Σ^(ℓ)：已有边界与组织</text></g>
+          <g class="node n2" transform="translate(390,62)"><rect width="220" height="92"/><text x="110" y="38">真实相互作用 Γ</text><text class="sub" x="110" y="65">改变状态、关系或概率</text></g>
+          <g class="node n3" transform="translate(700,128)"><rect width="210" height="92"/><text x="105" y="38">关系产物 p</text><text class="sub" x="105" y="65">A6 产生候选结构</text></g>
+          <g class="node n4" transform="translate(690,330)"><rect width="240" height="92"/><text x="120" y="38">保留 + 存在阈值</text><text class="sub" x="120" y="65">β≥β₀，Q≥q₀，A=1</text></g>
+          <g class="node n5" transform="translate(230,330)"><rect width="240" height="92"/><text x="120" y="38">新层级存在 Σ^(ℓ+1)</text><text class="sub" x="120" y="65">形成边界、身份与作用通道</text></g>
+          <text class="caption" x="500" y="253">A7：进入下一轮</text><text class="caption" x="500" y="279">上层再成为下层环境</text>
+        </svg>
+      </div>
+      <div class="formula" style="margin-top:18px;color:var(--ink);background:var(--blue-soft);border-left-color:var(--blue);">(Σ<sub>i</sub><sup>(ℓ)</sup>) →<sub>Γ</sub> p<sup>(ℓ+1)</sup> →<sub>B,C,Γ,β≥β₀,Q≥q₀,A=1</sub> Σ<sup>(ℓ+1)</sup> ⇝ feedback(Σ<sub>i</sub><sup>(ℓ)</sup>)</div>
+    </section>
+
+    <section id="network" aria-labelledby="network-title">
+      <div class="kicker">05 · 跨层级贯通压力测试</div>
+      <h2 id="network-title">从夸克—胶子作用到经济系统：一张分支—反馈网络</h2>
+      <p class="lead">3.3 把“胶子 → 原子 → 有机分子 → 细胞 → 动物 → 人 → 智能 → 组织 → 经济”的直观阶梯改写成两段相连、允许分支和反馈的网络。每条相邻边都必须单独建立领域桥接模型。</p>
+      <div class="svg-wrap network-holder">
+        <svg class="network-svg" viewBox="0 0 1160 430" role="img" aria-labelledby="network-svg-title network-svg-desc">
+          <title id="network-svg-title">从微观相互作用到经济系统的跨层网络</title><desc id="network-svg-desc">上排是量子场、强子原子核、原子、分子网络、细胞、多细胞动物和人类支系；下排是人类主体、智能、组织制度和经济系统，紫色虚线表示上层对下层的反馈。</desc>
+          <defs><marker id="n-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#216f8f"/></marker><marker id="n-arrow-p" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#6c5795"/></marker></defs>
+          <path class="edge" d="M150 112 H188"/><path class="edge" d="M315 112 H353"/><path class="edge" d="M480 112 H518"/><path class="edge" d="M645 112 H683"/><path class="edge" d="M810 112 H848"/>
+          <path class="edge" d="M150 315 H258"/><path class="edge" d="M389 315 H497"/><path class="edge" d="M628 315 H736"/>
+          <path class="back" d="M932 348 C1010 402, 1084 360, 1084 260 C1084 205, 1014 178, 940 177"/><path class="back" d="M741 278 C700 212, 620 180, 550 176"/>
+          <text class="label" x="1016" y="220">制度、市场、技术与资源的下行反馈</text><text class="label" x="640" y="205">智能/组织也改变环境</text>
+          <g class="node matter" transform="translate(20,65)"><rect width="130" height="94"/><text x="65" y="38">夸克—胶子</text><text class="sub" x="65" y="63">量子场相互作用</text></g>
+          <g class="node matter" transform="translate(185,65)"><rect width="130" height="94"/><text x="65" y="38">强子与原子核</text><text class="sub" x="65" y="63">束缚态与稳定身份</text></g>
+          <g class="node matter" transform="translate(350,65)"><rect width="130" height="94"/><text x="65" y="38">原子</text><text class="sub" x="65" y="63">核—电子结构</text></g>
+          <g class="node matter" transform="translate(515,65)"><rect width="130" height="94"/><text x="65" y="38">分子网络</text><text class="sub" x="65" y="63">化学键与反应循环</text></g>
+          <g class="node life" transform="translate(680,65)"><rect width="130" height="94"/><text x="65" y="38">细胞</text><text class="sub" x="65" y="63">膜、代谢、复制、调节</text></g>
+          <g class="node life" transform="translate(845,65)"><rect width="130" height="94"/><text x="65" y="38">多细胞动物</text><text class="sub" x="65" y="63">分化、器官、稳态</text></g>
+          <g class="node society" transform="translate(1010,65)"><rect width="130" height="94"/><text x="65" y="38">人类支系</text><text class="sub" x="65" y="63">遗传、工具、语言、文化</text></g>
+          <g class="node society" transform="translate(20,268)"><rect width="130" height="94"/><text x="65" y="38">人类主体</text><text class="sub" x="65" y="63">神经—身体—社会系统</text></g>
+          <g class="node knowledge" transform="translate(259,268)"><rect width="130" height="94"/><text x="65" y="38">智能功能</text><text class="sub" x="65" y="63">个体、集体或人工智能</text></g>
+          <g class="node society" transform="translate(498,268)"><rect width="130" height="94"/><text x="65" y="38">组织与制度</text><text class="sub" x="65" y="63">规则、角色、资源通道</text></g>
+          <g class="node economy" transform="translate(737,268)"><rect width="130" height="94"/><text x="65" y="38">经济系统</text><text class="sub" x="65" y="63">生产、交换、信用、预期</text></g>
+        </svg>
+      </div>
+      <div class="bridge-grid" aria-label="八个相邻层级桥接任务">
+        <article class="bridge-card"><b>1 · 夸克—胶子 → 原子</b><p>标出作用、束缚态和稳定身份；具体守恒量与能级由量子、核和原子物理给出。</p></article>
+        <article class="bridge-card"><b>2 · 原子 → 有机分子</b><p>关系产物是化学结构；键、构型和反应路径由量子化学、热力学与动力学定义。</p></article>
+        <article class="bridge-card"><b>3 · 分子 → 细胞</b><p>聚集不等于生命；需膜边界、代谢、信息保存、复制变异和环境交换跨越阈值。</p></article>
+        <article class="bridge-card"><b>4 · 细胞 → 动物</b><p>需要黏附、分化、发育、器官分工、整体稳态和繁殖演化，并保留上层反馈。</p></article>
+        <article class="bridge-card"><b>5 · 动物 → 人</b><p>人是特定进化支系，不是动物迭代的必然终点；要检验生态、选择、协作和文化累积。</p></article>
+        <article class="bridge-card"><b>6 · 人 → 智能</b><p>先区分载体实现的功能与独立存在；个体、集体和人工智能需分别定义边界与作用通道。</p></article>
+        <article class="bridge-card"><b>7 · 人/智能 → 组织</b><p>沟通、规则、角色、权责、目标和资源形成组织；组织再反向塑造成员行为。</p></article>
+        <article class="bridge-card"><b>8 · 组织 → 经济</b><p>经济是生产、分配、交换、信用、货币、法律、技术、生态资源与预期的宏观关系系统。</p></article>
+      </div>
+      <div class="limits"><article class="limit"><h3>公理能够统一的部分</h3><ul><li>真实相互作用、关系产物、跨轮保留</li><li>边界建立、身份复现、上层反馈</li><li>逐层桥接、分支和失败入口</li></ul></article><article class="limit warning"><h3>公理不能单独给出的答案</h3><ul><li>具体粒子谱、化学反应路径和生命起源事件</li><li>物种路线、智能算法、制度设计和经济参数</li><li>任何跨层“总箭头”都不能替代中间机制</li></ul></article></div>
+    </section>
+
+    <section id="mindmap" aria-labelledby="mindmap-title">
+      <div class="kicker">06 · 章节脑图</div>
+      <h2 id="mindmap-title">3.3 文档每一部分在回答什么问题</h2>
+      <p class="lead">点击章节展开要点。中心是“对象—实体—关系的最大包涵”，两侧分别展开前提、公理、引理、跨层检验和理论自迭代。</p>
+      <div class="mindmap">
+        <div class="mind-col">
+          <details class="branch" open><summary><span class="branch-no">01</span><span>前提定位</span></summary><div class="branch-detail"><ul><li>相对性：认识无法站到世界之外</li><li>平等：去除人类中心主义和对象等级偏见</li><li>过程与历史：从动态形成中理解对象</li></ul></div></details>
+          <details class="branch" open><summary><span class="branch-no">02</span><span>存在定义</span></summary><div class="branch-detail"><ul><li>Σ=(X,B,C,F,Γ)</li><li>对象、实体、关系都可进入候选域</li><li>Ex 由 β、Q、A 合取判定</li></ul></div></details>
+          <details class="branch" open><summary><span class="branch-no">03</span><span>七条公理</span></summary><div class="branch-detail"><ul><li>A1—A3：关系、身份、证据</li><li>A4—A5：有限开放与差异响应</li><li>A6—A7：关系产物与迭代保留</li></ul></div></details>
+          <details class="branch" open><summary><span class="branch-no">04</span><span>不完美与周期</span></summary><div class="branch-detail"><ul><li>有限系统不能绝对封闭和永恒维持</li><li>复现度、特征周期、惯性分别量化</li><li>频率不自动等于稳定性或惯性</li></ul></div></details>
+        </div>
+        <div class="hub" aria-label="脑图中心"><div><strong>存在迭代论</strong><span>相互作用 · 复现 · 组织 · 迭代</span></div></div>
+        <div class="mind-col">
+          <details class="branch" open><summary><span class="branch-no">05</span><span>迭代演化</span></summary><div class="branch-detail"><ul><li>关系产物可能跨越阈值成为新存在</li><li>新层级反馈环境、边界和转移规则</li><li>竞争、合作、冲突、共生均可并生</li></ul></div></details>
+          <details class="branch" open><summary><span class="branch-no">06</span><span>跨层贯通</span></summary><div class="branch-detail"><ul><li>每条相邻边填写 M 接口</li><li>分支网络替代单线阶梯</li><li>领域变量和动力学不能被公理省略</li></ul></div></details>
+          <details class="branch" open><summary><span class="branch-no">07</span><span>理论自迭代</span></summary><div class="branch-detail"><ul><li>T₀ 描述对象，T₁ 把理论作为知识存在</li><li>差异 → 候选 → 比较 → 检验 → 决策</li><li>保留、修订、分支、暂缓、否决或回退</li></ul></div></details>
+          <details class="branch" open><summary><span class="branch-no">08</span><span>严谨边界</span></summary><div class="branch-detail"><ul><li>闭合证明过程可追溯，不证明新版本必真</li><li>没有中间桥接就只能是待研究假说</li><li>反例进入下一轮，而不是被排除</li></ul></div></details>
+        </div>
+      </div>
+    </section>
+
+    <section id="self-loop" aria-labelledby="self-loop-title">
+      <div class="kicker">07 · A7 元层实现</div>
+      <h2 id="self-loop-title">理论如何对自身进行迭代</h2>
+      <p class="lead">3.3 的核心新增不是第八条公理，而是把初稿“理论也应具有迭代能力”变成可重复、可失败、可回退的元层协议。</p>
+      <div class="loop-grid">
+        <div class="svg-wrap">
+          <svg class="loop-svg" viewBox="0 0 820 540" role="img" aria-labelledby="loop-title loop-desc">
+            <title id="loop-title">理论自迭代八步闭环</title><desc id="loop-desc">从差异输入开始，定位作用层级，生成修订候选，与替代方案比较，执行检验，做出版本决策，保存版本并允许回退，再进入下一轮。</desc>
+            <defs><marker id="loop-arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#216f8f"/></marker></defs>
+            <ellipse class="ring" cx="410" cy="270" rx="310" ry="210"/>
+            <path class="edge" d="M300 104 C358 62, 430 62, 487 104"/><path class="edge" d="M600 145 C650 188, 672 237, 656 283"/><path class="edge" d="M623 380 C565 432, 500 455, 438 447"/><path class="edge" d="M265 417 C195 374, 157 324, 160 269"/><path class="edge" d="M179 183 C199 144, 222 124, 260 111"/>
+            <g class="node l1" transform="translate(220,57)"><rect width="190" height="76"/><text x="95" y="33">① 差异输入</text><text class="sub" x="95" y="56">批评、证据、矛盾、替代模型</text></g>
+            <g class="node l2" transform="translate(470,78)"><rect width="190" height="76"/><text x="95" y="33">② 定位层级</text><text class="sub" x="95" y="56">L0—L4，明确作用位置</text></g>
+            <g class="node l3" transform="translate(580,260)"><rect width="190" height="76"/><text x="95" y="33">③ 生成候选</text><text class="sub" x="95" y="56">保留、最小修订、分支</text></g>
+            <g class="node l4" transform="translate(360,415)"><rect width="190" height="76"/><text x="95" y="33">④ 比较检验</text><text class="sub" x="95" y="56">一致性、可追溯、可证伪</text></g>
+            <g class="node l5" transform="translate(90,350)"><rect width="190" height="76"/><text x="95" y="33">⑤ 决策与版本</text><text class="sub" x="95" y="56">接受、暂缓、否决、回退</text></g>
+            <text class="caption" x="410" y="250">Closure<sub>T</sub></text><text class="caption" x="410" y="278">不是自我证明，而是可审计的变化</text>
+          </svg>
+        </div>
+        <aside class="gate"><h3>硬门槛 Gate<sub>T</sub></h3><p style="color:rgba(255,255,255,.78);font-size:.84rem;">候选版本必须同时通过五项门槛，不能用总分掩盖逻辑矛盾或证据失败。</p><div class="formula">Consistency ∧ Traceability ∧ Testability ∧ NonCircularity ∧ Versionability</div><div class="decision-row"><span class="decision">保留 retain</span><span class="decision">修订 revise</span><span class="decision">分支 branch</span><span class="decision">暂缓 suspend</span><span class="decision">否决 reject</span><span class="decision">回退 rollback</span></div><div class="t0t1"><div><strong>T₀ 对象层</strong><br>描述世界对象、公理、引理和桥接规则。</div><div><strong>T₁ 元层</strong><br>把 T₀ 作为知识系统 Σ<sub>theory</sub>进行审查。</div></div></aside>
+      </div>
+      <div class="rule-strip"><strong>完成条件：</strong>当前版本能说明自己从何而来、为何改变或不改变、什么会使它失败、失败后如何分支或回退，以及下一轮由什么新问题继续。</div>
+    </section>
+
+    <section id="concepts" aria-labelledby="concepts-title">
+      <div class="kicker">08 · 关键词速查</div>
+      <h2 id="concepts-title">把 3.3 记成八个位置</h2>
+      <div class="concept-grid">
+        <div class="concept"><strong>相对性</strong><span>认识的现实起点；命题必须带条件。</span></div>
+        <div class="concept"><strong>平等</strong><span>去除人类中心主义和对象等级偏见。</span></div>
+        <div class="concept"><strong>过程与历史</strong><span>以形成、维持、变化、终止的动态路径观察。</span></div>
+        <div class="concept"><strong>存在</strong><span>相互作用、持续复现、具有组织的过程系统。</span></div>
+        <div class="concept"><strong>不完美性</strong><span>有限系统非闭合，差异需要通过作用通道处理。</span></div>
+        <div class="concept"><strong>周期与惯性</strong><span>复现快慢、组织稳定和扰动恢复是不同变量。</span></div>
+        <div class="concept"><strong>迭代演化</strong><span>关系产物被保留、重组并形成新的层级和反馈。</span></div>
+        <div class="concept"><strong>理论自迭代</strong><span>理论也是知识存在，必须接受证据、分支和回退。</span></div>
+      </div>
+    </section>
+  </main>
+  <footer><div class="wrap footer-row"><span>依据：存在迭代论_世界底层公理公式化升级稿_3.3.docx</span><span>用途：帮助理解理论结构，不替代领域证明或经验检验。</span></div></footer>
+  <script>
+    (() => {
+      const data = {
+        A1: ["A1 · 关系索引公理", "任何可检验的对象属性，都通过对象与参照系统之间的相互作用通道被确定，并相对于尺度、时间窗和误差范围表述。", "y_(Σ|r)^λ(t)=M_r^λ[x_Σ(t), Γ_(Σr)(t)] + η(t)"],
+        A2: ["A2 · 过程—历史同一性公理", "具体存在的同一性由历史形成的关键组织约束 C 在连续更新中被持续复现来维持；不要求全部材料和微观状态不变。", "d_C[x(t)] ≤ ε_C，t∈J"],
+        A3: ["A3 · 相互作用证据公理", "经验存在的肯定必须有一条原则上能够在其他存在、关系或记录中留下差异的因果或信息路径。", "Ex_经验(Σ)=1 ⇒ 存在 Γ_(Σ↔r) ≠ ∅"],
+        A4: ["A4 · 有限开放公理", "处在更大环境中的有限系统，其状态转移至少部分依赖环境、边界、历史输入或真实作用通道，因此不是绝对自足。", "F(x,e,Γ;H) 对 e、H 或 Γ_(Σ↔E) 至少一项有依赖"],
+        A5: ["A5 · 差异—响应公理", "状态变化需要可作用差异与系统响应共同成立；没有进入 Γ 或不能改变 F 输出的差异，不构成本轮驱动。", "Δ_j∉Γ 或 F 对 Δ_j 不变 ⇒ Contr_j[Δx]=0"],
+        A6: ["A6 · 关系产物公理", "只要相互作用真实改变参与者、关系或后续作用概率，作用后就产生可描述的关系产物 p。", "p_(ij)(t+Δt)=H[x_i(t),x_j(t),Γ_(ij)(t)]"],
+        A7: ["A7 · 迭代保留公理", "一次作用的结果若改变下一轮状态、规则、边界或相互作用概率，系统便发生迭代；可持续实现的关系模式被保留。", "(x_(n+1),B_(n+1),C_(n+1),Γ_(n+1))=I(x_n,B_n,C_n,Γ_n,e_n,p_n)"]
+      };
+      const title = document.getElementById("axiom-detail-title");
+      const text = document.getElementById("axiom-detail-text");
+      const formula = document.getElementById("axiom-detail-formula");
+      document.querySelectorAll(".axiom-card").forEach((card) => card.addEventListener("click", () => {
+        document.querySelectorAll(".axiom-card").forEach((item) => item.setAttribute("aria-pressed", "false"));
+        card.setAttribute("aria-pressed", "true");
+        const item = data[card.dataset.axiom];
+        title.textContent = item[0]; text.textContent = item[1]; formula.textContent = item[2];
+      }));
+      document.getElementById("printBtn").addEventListener("click", () => window.print());
+    })();
+  </script>
+</body>
+</html>
