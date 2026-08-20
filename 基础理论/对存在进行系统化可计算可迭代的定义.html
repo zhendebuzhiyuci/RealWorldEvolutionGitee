@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>对存在进行系统化、可计算、可迭代的定义</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+:root { --ink: #1a1a1a; --muted: #666; --accent: #0b5cad; --bg: #fbfbf8; --card: #ffffff; }
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Noto Serif SC", "Songti SC", "SimSun", Georgia, serif;
+  line-height: 1.85; font-size: 17px;
+}
+.container { max-width: 860px; margin: 0 auto; padding: 48px 28px 80px; }
+h1 {
+  text-align: center; font-size: 1.7em; line-height: 1.4; margin: 0 0 6px;
+  font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif; color: var(--ink);
+}
+.subtitle { text-align: center; color: var(--muted); margin: 0 0 8px; }
+.meta { text-align: center; color: var(--muted); font-size: .95em; margin-bottom: 28px; }
+h2 {
+  font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  font-size: 1.28em; color: var(--accent); border-bottom: 2px solid #e6e6e0;
+  padding-bottom: 6px; margin: 42px 0 16px;
+}
+h3 {
+  font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  font-size: 1.08em; margin: 26px 0 10px; color: #333;
+}
+p { margin: 14px 0; text-align: justify; }
+strong { color: #111; }
+blockquote {
+  margin: 18px 0; padding: 10px 20px; background: #f3f5f7;
+  border-left: 4px solid var(--accent); color: #333; border-radius: 0 6px 6px 0;
+}
+.math {
+  text-align: center; margin: 20px auto; padding: 10px 16px;
+  background: var(--card); border: 1px solid #ecece6; border-radius: 8px;
+  overflow-x: auto;
+}
+table { border-collapse: collapse; width: 100%; margin: 20px 0; background: var(--card); }
+th, td { border: 1px solid #ddd; padding: 10px 14px; text-align: left; font-size: .95em; }
+th { background: #f0f3f6; font-family: "Noto Sans SC", "Microsoft YaHei", sans-serif; }
+tbody tr:nth-child(even) { background: #fafafa; }
+ul, ol { margin: 14px 0; padding-left: 28px; }
+li { margin: 6px 0; }
+hr { border: none; border-top: 1px solid #e2e2dc; margin: 30px 0; }
+a { color: var(--accent); }
+@media (max-width: 600px) {
+  body { font-size: 15.5px; }
+  .container { padding: 28px 16px 60px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>对存在进行系统化、可计算、可迭代的定义</h1>
+<p class="subtitle"><strong>高兆华</strong></p>
+<p><strong>摘要：</strong> "存在"是哲学的核心问题，却长期停留在直觉与思辨层面。本文试图把它升级为一个可以系统化表述、可以计算检验、可以持续迭代的形式对象：先把"存在"定义为一类可检验的过程系统，再把这一定义转化为可计算的存在判据与可执行的迭代程序。核心结论是——存在不是某种终极实体，而是"与外界保持相互作用、保持持续不断复现的过程系统"；这一定义可被写成边界可区分度、过程保持度、作用通道条件三项合取的可计算判据，并进一步通过关系产物与迭代保留机制，支撑起跨层级的生成、检验与理论自迭代闭环。由此，对"存在"的研究从"说不清"走向"可形式化、可测量、可修订"。</p>
+<p><strong>关键词：</strong> 存在；相对性；不完美性；周期性；迭代演化；世界统一原理；公理系统；可计算判据；自迭代</p>
+<hr/>
+<h2>一、引言：为什么要"系统化、可计算、可迭代"地定义存在</h2>
+<p>我们身处世界内部认识世界。感官、仪器、语言、数学与理论本身，都是这个世界过程的一部分。这意味着任何关于"存在"的论断，都无法脱离观察者所处的层级、尺度与历史而获得绝对意义。</p>
+<p>在这种相对性的现实面前，传统哲学对"存在"的处理往往有两种困境：其一是把存在当作不言自明的本体，陷入不可检验的断言；其二是把存在还原为某种终极粒子或单元，反而丢失了"存在"作为世界共性的普遍含义。</p>
+<p>本文的目标，是把"存在"从一个哲学直觉，升级为一个<strong>系统化、可计算、可迭代</strong>的形式对象：</p>
+<ul>
+<li><strong>系统化</strong>：明确前提、公理、引理与定理的层级，厘清"先信什么、再推什么"；</li>
+<li><strong>可计算</strong>：把定义写成带阈值、可测量的判据公式，使"某物是否存在"成为可检验的问题；</li>
+<li><strong>可迭代</strong>：让存在系统（包括理论自身）在差异输入下进入下一轮保留、修订或回退，形成永不封闭、持续前进的演化。</li>
+</ul>
+<p>后文依此顺序展开：先确立认识现实的起点（相对性、平等、过程与历史），再由起点推出存在定义，接着把定义转化为可计算的判据，进而说明存在如何通过不完美性与迭代演化生成世界，最后把这一套方法回用到理论自身，形成自迭代闭环。</p>
+<hr/>
+<h2>二、现实起点：三项前提</h2>
+<p>进入存在定义之前，必须先确立三条关于"我们如何认识世界"的基础定位。它们不是关于具体存在的结论，而是防止局部绝对化、人类中心化与阶段结构永恒化的护栏。</p>
+<h3>（一）相对性：必须面对的现实</h3>
+<p>人处在世界内部认识世界。设候选存在系统为 Σ，参照关系为 r，观察尺度为 λ，时间窗为 J，允许误差为 ε，则一个完整命题应写为：</p>
+<div class="math">\[P(\Sigma \mid r, \lambda, J, \varepsilon)\]</div>
+<p>相对性包含两层含义：观测记录取决于作用通道与测量方式；系统的边界、功能与状态只有置于环境关系中才有确定含义。相对性<strong>不等于</strong>任意主义——当 r、λ、J、ε 固定时，不同研究者可以比较记录、重复观测并排除错误。</p>
+<h3>（二）平等：去偏见的客观要求</h3>
+<p>平等是方法论要求：去除人类中心主义与对象等级偏见，使对象、实体与关系获得同等研究资格。其直接的形式后果是——所有候选存在接受同一形式的存在判据 Ex。无论是粒子、细胞、个人、组织还是知识体系，都用同一套规则检验边界、身份维持、作用通道与终止条件。</p>
+<p>"存在即合理"在此指：先分析已形成状态的生成与维持条件，而非道德或政治上的正当化。</p>
+<h3>（三）过程与历史：动态观察视角</h3>
+<p>从形成、维持、变化与终止观察事物。设系统状态为 x(t)，环境状态为 e(t)，相互作用网络为 Γ(t)，状态转移规则为 F，则：</p>
+<blockquote><strong>x(t + Δt) = F[x(t), e(t), Γ(t); H_t]</strong>，其中 H_t = {x(s), e(s), Γ(s) : s ≤ t}</blockquote>
+<p>当前状态是既往相互作用、路径与环境积累的阶段性结果。存在首先是持续实现的过程，其次才是对象名词；理论自身也必须进入下一版本。</p>
+<hr/>
+<h2>三、系统化的核心：存在的定义与形式对象</h2>
+<p>完成三项前提后，进入存在定义。</p>
+<h3>（一）核心定义</h3>
+<blockquote><strong>存在是与外界保持相互作用、保持持续不断复现的过程系统。</strong></blockquote>
+<p>这一定义不依赖"有无质量""抽象还是实体""个体还是组织"——存在是世界万物共有的属性。只要某系统与外界保持相互作用并能持续复现自身，它就在该层级、尺度与时间窗内"存在"。</p>
+<h3>（二）统一形式对象</h3>
+<p>在层级 ℓ、尺度 λ 和时间窗 J 内，候选存在被写为一个五元组：</p>
+<div class="math">\[\Sigma^{(\ell)} = \left( X,\, B,\, C,\, F,\, \Gamma \right)\]</div>
+<ul>
+<li><strong>X</strong>：状态空间；</li>
+<li><strong>B</strong>：系统—环境边界；</li>
+<li><strong>C</strong>：身份组织约束（关键组织约束）；</li>
+<li><strong>F</strong>：状态转移规则；</li>
+<li><strong>Γ</strong>：系统内部及其与环境的作用通道。</li>
+</ul>
+<p>候选域同时包含<strong>对象、实体、关系</strong>三类：对象是被区分的存在指称；实体具有相对稳定边界与组织；关系由相互作用或共同复现形成。三者可随参照与尺度转换角色。</p>
+<div class="math">\[D_{\mathrm{cand}} = D_{\mathrm{object}} \cup D_{\mathrm{entity}} \cup D_{\mathrm{relation}}, \qquad D_{\ell} := \left\{\Sigma_i^{(\ell)} : Ex_{(\lambda,J)}(\Sigma_i)=1\right\}\]</div>
+<p><strong>类型约束：</strong> \(D_{\ell}\) 是第 \(\ell\) 层通过存在判据的候选系统集合；\(X\) 是单个 \(\Sigma\) 的状态空间，二者不能混作同一对象域。</p>
+<h3>（三）设计原则：最大包涵—最小规则</h3>
+<p>在一致性、可区分性与可检验性不受损的条件下，底层独立规则越少、领域约束越下沉，统一形式的覆盖范围越广。"规则少"是去除非必要假设，而非取消存在判据。</p>
+<hr/>
+<h2>四、可计算：把定义写成可检验判据</h2>
+<p>定义若要"可计算"，必须把"相互作用""复现""系统"转译为可测量的指标。</p>
+<h3>（一）三个判据分量</h3>
+<p>为统一"偏离身份约束"与"比较两时刻组织"的类型，引入约束特征空间 Z、特征映射 φ_C、归一化度量 ρ 与目标集 C_*：</p>
+<div class="math">\[\varphi_C: X \to Z, \quad \rho: Z \times Z \to [0,1], \quad C_* \subseteq Z, \quad d_C(x) := \inf_{z \in C_*} \rho\left( \varphi_C(x),\, z \right)\]</div>
+<p>由此定义三项判据分量：</p>
+<ol>
+<li><strong>边界可区分度：</strong> \(\beta_{(\lambda,J)}(\Sigma)\in[0,1]\) —— 系统与环境是否可区分；</li>
+<li><strong>过程保持度：</strong> \(Q_J(\Sigma)=\frac{1}{|J|}\int_J \mathbf{1}\!\left[d_C(x(t))\le\varepsilon_C\right]dt\) —— 在观测窗内维持身份约束的时间占比；</li>
+<li><strong>作用通道条件：</strong> \(A_J(\Sigma,E)=1\) 当且仅当存在 \(\Gamma_{(\Sigma\leftrightarrow E)}\) 能在 \(J\) 内留下可区分差异。</li>
+</ol>
+<h3>（二）基础存在判据（合取结构）</h3>
+<div class="math">\[Ex_{(\lambda,J)}(\Sigma) = 1 \Leftrightarrow \beta_{(\lambda,J)}(\Sigma) \ge \beta_0 \,\wedge\, Q_J(\Sigma) \ge q_0 \,\wedge\, A_J(\Sigma, E) = 1\]</div>
+<p>该式把"存在"定义精确化为：系统有可区分边界、能在过程中复现自身、并能与环境作用。阈值 β_0、q_0、ε_C 必须在观测前固定并记录；观测后修改阈值须作为新方案另立版本，不得回写为原方案成功。</p>
+<h3>（三）周期与惯性：可计算的维持能力</h3>
+<p>复现不必是严格周期。定义约束复现度：</p>
+<p>设总观测窗为 \(J_{\mathrm{obs}}\)，并令 \(J^{\prime}(T)=\left\{t\in J_{\mathrm{obs}}:t+T\in J_{\mathrm{obs}}\right\}\)，要求 \(\left|J^{\prime}(T)\right|&gt;0\)。</p>
+<div class="math">\[R_C(T) = 1 - \frac{1}{\left| J^{\prime}(T) \right|} \int_{J^{\prime}(T)} \min\left( 1,\, \rho\left( \varphi_C(x(t+T)),\, \varphi_C(x(t)) \right) \right)\,dt\]</div>
+<p>当 \(R_C(T)\) 存在稳定峰值且峰值达到预注册阈值时，取：</p>
+<div class="math">\[T_{\Sigma}=\arg\max_{T&gt;0}R_C(T),\qquad R_C(T_{\Sigma})\ge r_0,\qquad f_{\Sigma}=\frac{1}{T_{\Sigma}}\]</div>
+<p>存在惯性定义为扰动下保持或恢复身份约束 C 的能力：</p>
+<div class="math">\[I_{ex}(u) = \frac{1}{a \min\left(1, \Delta C_{\max}/\Delta C_{\mathrm{adm}}\right) + b \min\left(1, \tau_{\mathrm{rec}}/\tau_{\mathrm{adm}}\right) + c P_{\mathrm{loss}} + \varepsilon_I}\]</div>
+<p>生命期则是身份约束从首次稳定形成到不可恢复失效的时间区间：\(L_{\Sigma}=t_{\mathrm{end}}-t_{\mathrm{birth}}\)。</p>
+<blockquote>注意：频率、周期精度、稳定性与惯性是不同变量，不能脱离模型直接推出"频率越高，惯性越大"。这一区分使"惯性"概念得以跨领域使用而不被机械套用。</blockquote>
+<hr/>
+<h2>五、可迭代：七条公理与世界生成</h2>
+<p>可计算判据回答"某物是否存在"，迭代机制回答"存在如何演化出世界"。底层公理体系提供统一生成语法。</p>
+<h3>（一）七条公理的最小生成链</h3>
+<table><thead><tr>
+<th>公理</th>
+<th>名称</th>
+<th>核心内容</th>
+</tr></thead><tbody>
+<tr>
+<td>A1</td>
+<td>关系索引</td>
+<td>可检验属性经由与参照系统的相互作用通道确定，并相对尺度、时间窗、误差表述</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>过程—历史同一性</td>
+<td>同一性是关键组织约束 C 在连续更新中的复现，不要求材料或轨迹完全重复</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>相互作用证据</td>
+<td>经验存在的肯定须有原则上能留下差异的因果或信息路径</td>
+</tr>
+<tr>
+<td>A4</td>
+<td>有限开放</td>
+<td>有限现实系统至少部分依赖环境，非绝对自足、封闭、永恒</td>
+</tr>
+<tr>
+<td>A5</td>
+<td>差异—响应</td>
+<td>状态变化来自可作用差异与系统响应规则的共同结果</td>
+</tr>
+<tr>
+<td>A6</td>
+<td>关系产物</td>
+<td>真实相互作用产生可描述的关系产物 p</td>
+</tr>
+<tr>
+<td>A7</td>
+<td>迭代保留</td>
+<td>改变下一轮状态/规则/边界/作用概率者被保留，否则衰减、解体或替代</td>
+</tr>
+</tbody></table>
+<h3>（一）七条公理的公式接口</h3>
+<p>下列公式把表中的最小规则写成可检验接口；它们不是各领域的具体动力学方程，具体变量、量纲与测量方案须下沉到领域模型。</p>
+<p><strong>A1 关系索引：</strong>可检验属性必须经由对象与参照系统的作用通道进入记录：</p>
+<div class="math">\[y_{(\Sigma\mid r)}^{\lambda}(t)=M_{r}^{\lambda}\!\left[x_{\Sigma}(t),\,\Gamma_{(\Sigma r)}(t)\right]+\eta(t)\]</div>
+<p><strong>A2 过程—历史同一性：</strong>复现的是关键组织约束，而非全部材料或轨迹：</p>
+<div class="math">\[d_C\!\left[x(t)\right]\le\varepsilon_C,\qquad t\in J\]</div>
+<p><strong>A3 相互作用证据：</strong>经验存在主张必须有原则上可留下差异的路径：</p>
+<div class="math">\[Ex_{\mathrm{exp}}(\Sigma)=1\ \Longrightarrow\ \exists\,\Gamma_{(\Sigma\leftrightarrow r)}\ne\varnothing\]</div>
+<p><strong>A4 有限开放：</strong>有限系统至少在环境、历史或作用通道之一上不是绝对封闭：</p>
+<div class="math">\[\begin{gathered}\exists e,e^{\prime}:F(x,e,\Gamma;H)\ne F(x,e^{\prime},\Gamma;H)\\{}\lor\ \exists H,H^{\prime}:F(x,e,\Gamma;H)\ne F(x,e,\Gamma;H^{\prime})\\{}\lor\ \Gamma_{(\Sigma\leftrightarrow E)}\ne\varnothing\end{gathered}\]</div>
+<p><strong>A5 差异—响应：</strong>只有进入作用通道且能改变转移规则输出的差异，才对本轮变化有贡献：</p>
+<div class="math">\[\Delta x(t)=F[x(t),e(t),\Gamma(t);H_t]-x(t)=\Phi\!\left(\left.\Delta(x(t),e(t),H_t)\right|_{\Gamma(t)},F\right)\]</div>
+<div class="math">\[\Delta_j\notin\Gamma\ \lor\ F\ \text{对}\ \Delta_j\ \text{不变}\ \Longrightarrow\ \mathrm{Contr}_j[\Delta x]=0\]</div>
+<p><strong>A6 关系产物：</strong>真实相互作用改变参与者、关系或后续作用概率时，产生可描述的关系产物：</p>
+<div class="math">\[p_{ij}(t+\Delta t)=H\!\left[x_i(t),x_j(t),\Gamma_{(ij)}(t)\right]\]</div>
+<p><strong>A7 迭代保留：</strong>作用结果写入下一轮的状态、边界、身份约束或作用通道：</p>
+<div class="math">\[\left(x_{n+1},B_{n+1},C_{n+1},\Gamma_{n+1}\right)=I\!\left(x_n,B_n,C_n,\Gamma_n,e_n,p_n\right)\]</div>
+<p>生成链为：<strong>关系索引 → 过程身份 → 作用证据 → 有限开放 → 差异响应 → 关系产物 → 迭代保留</strong>。</p>
+<h3>（二）不完美性：迭代的根本动力</h3>
+<p>A4（有限开放）是"不完美性"的公式基础：有限存在不是绝对封闭的，必须通过与环境持续作用维持自身。可操作化为"在当前环境中偏离身份可行域并依赖外部补偿的程度"：</p>
+<div class="math">\[\bar d_C(x)=\min\!\left(1,\frac{d_C(x)}{d_{\mathrm{adm}}}\right),\qquad \bar g_C(x,e)=\min\!\left(1,\frac{g_C(x,e)}{g_{\mathrm{adm}}}\right)\]</div>
+<div class="math">\[\delta_C(t) = a\,\bar d_C\!\left[x(t)\right] + b\,\bar g_C\!\left[x(t),e(t)\right]\]</div>
+<p>其中 d̄_C、ḡ_C 为归一化后的身份偏离与资源/功能缺口。不完美性驱动系统寻求平衡、吸收外部信息能量以逼近完美——但完美不可抵达，故运动不止。不完美不是缺陷，而是存在的必要条件。</p>
+<h3>（三）迭代演化与上层生成</h3>
+<p>由 A6 产生关系产物 \(p\)，由 A7 使可保持关系进入后续轮次。当 \(p\) 获得边界、身份约束、作用通道并满足 \(\beta\ge\beta_0\)、\(Q_J\ge q_0\)、\(A_J=1\) 时，构成新层级存在：</p>
+<div class="math">\[\left(\Sigma_i^{(\ell)}\right)\xrightarrow{\,\Gamma^{(\ell)}\,}p^{(\ell+1)}\xrightarrow[\,B,C,\Gamma,\ \beta\ge\beta_0,\ Q_J\ge q_0,\ A_J=1\,]{}\Sigma^{(\ell+1)}\rightsquigarrow\mathrm{feedback}\!\left(\Sigma_i^{(\ell)}\right)\]</div>
+<p>新存在又通过反馈改变下层环境、边界与状态转移：<strong>\(\Sigma^{(\ell+1)} \rightsquigarrow \left[ e^{(\ell)},\, B^{(\ell)},\, F^{(\ell)} \right]\)</strong>。</p>
+<h3>（四）跨层约束（四项防过度外推）</h3>
+<ul>
+<li><strong>R1 相邻桥接</strong>：跨层主张须拆成可检验的相邻桥接模型；</li>
+<li><strong>R2 涌现阈值</strong>：聚集 ≠ 组织，关系产物须跨过存在判据才成新层级；</li>
+<li><strong>R3 载体—功能分离</strong>：载体存在不推出功能为独立存在，二者分别检验；</li>
+<li><strong>R4 分支—反馈网络</strong>：层级生成是含同层、上行、下行的网络，非单向阶梯。</li>
+</ul>
+<div class="math">\[M_{(\ell\to\ell+1)}=\left(D_{\ell},\Gamma_{\ell},H_{\ell},I_{\ell},B_{(\ell+1)},C_{(\ell+1)},F_{(\ell+1)},\Theta_{(\ell+1)},\Psi_{\downarrow}\right)\]</div>
+<p>其中 \(D_{\ell}\) 是下层对象域，\(H_{\ell}\) 是关系产物规则，\(I_{\ell}\) 是选择、淘汰和保留规则，\(\Theta\) 汇总形成阈值与时间尺度，\(\Psi_{\downarrow}\) 表示上层反馈。缺少相邻桥接中的任一项，只能形成待研究假说。</p>
+<hr/>
+<h2>六、世界统一原理：递归生成网络</h2>
+<p>把世界视为已形成的存在与关系集合 W_n，G 为层级生成算子，则：</p>
+<div class="math">\[W_{n+1} = W_n \cup \bigcup_{\ell} G_{\ell}\left( W_n^{(\ell)},\, \Gamma_n^{(\ell)},\, e_n^{(\ell)} \right)\]</div>
+<div class="math">\[\mathcal{G}_W=\left(V,E_{\mathrm{same}},E_{\mathrm{up}},E_{\mathrm{down}}\right),\qquad \ell(v)=\begin{cases}0,&v\in V_0\\1+\max_{u\in\mathrm{Pa}_{\mathrm{up}}(v)}\ell(u),&\text{其他节点}\end{cases}\]</div>
+<p><strong>世界统一原理统一的是生成程序，而非一条具体运动方程。</strong> 对象、实体、关系共享"相互作用—关系产物—迭代保留—层级反馈"的最小逻辑接口，各领域自行定义参数与动力学。世界因此是多尺度分支、反馈与递归形成的网络。</p>
+<p>由此得到广义生命体定义：任何具有可识别生成、维持、转变、衰弱与终止阶段的 Σ，都具有过程生命结构：</p>
+<div class="math">\[\mathrm{Life}_{ex}(\Sigma) = \left[ t_{\mathrm{birth}},\; t_{\mathrm{maintain}},\; t_{\mathrm{transform}},\; t_{\mathrm{end}} \right]\]</div>
+<p>即世界的万事万物都可看作生命体，世界的迭代演化来自存在的新陈代谢、自组织与主动进化——这是打开世界统一原理的大门。</p>
+<hr/>
+<h2>七、理论自身的可迭代：元层自迭代闭环</h2>
+<p>"世界原理和理论自身都应具有迭代能力"是贯穿全文的自觉要求。因此 A7 必须在知识系统层面实现：理论 T_n 作为知识存在，被 A1—A7 作用。</p>
+<div class="math">\[T_n = \left( P_n,\, A_n,\, L_n,\, M_n,\, E_n,\, R_n,\, V_n \right)\]</div>
+<p>差异集筛选为可追溯、能作用、可检验者：</p>
+<div class="math">\[\Delta_T^{(n,*)}=\left\{\delta:\mathrm{Source}(\delta)=1\ \wedge\ \mathrm{Actionable}(\delta)=1\ \wedge\ \mathrm{Testable}(\delta)=1\right\}\]</div>
+<p>九步执行程序包括：冻结当前版本 → 声明身份约束 → 收集差异 → 筛选可作用差异 → 分级（L0 记号 / L1 模型 / L2 引理 / L3 公理 / L4 前提定义）→ 生成候选 → 六维审查 → 决策（保留/修订/分支/暂缓/否决/回退）→ 版本留痕。</p>
+<div class="math">\[\mathrm{Decision}_T(n)\in\{\mathrm{retain},\mathrm{revise},\mathrm{branch},\mathrm{suspend},\mathrm{reject},\mathrm{rollback}\}\]</div>
+<div class="math">\[T_{n+1}=I_T\!\left(T_n,\Delta_T^{(n,*)},E_n,\mathrm{Alt}_n,\mathrm{Audit}_n,\mathrm{Decision}_T(n)\right)\]</div>
+<p>接受硬门槛：</p>
+<div class="math">\[\mathrm{Gate}_T=\mathrm{Consistency}\wedge\mathrm{Traceability}\wedge\mathrm{Testability}\wedge\mathrm{NonCircularity}\wedge\mathrm{Versionability}\]</div>
+<p>自迭代闭环的完成条件：当前版本能说明来源、变更依据、失败条件、分支/回退方式及下一轮问题——这不是理论自证，而是方法上的闭合。</p>
+<hr/>
+<h2>八、一条可执行的统一生成链</h2>
+<p>综合全文，对存在的系统化、可计算、可迭代定义可压缩为一条世界底层生成链：</p>
+<blockquote><strong>相对性现实 → 平等观察要求 → 过程与历史视角 → 定义存在 → 不完美性 → 周期性 → 相互作用与迭代演化 → 过程生命 → 世界统一</strong></blockquote>
+<blockquote>新层级存在 ⇝ 反向塑造原层级；理论作为知识存在：差异输入 → 候选修订 → 比较检验 → 保留/分支/回退</blockquote>
+<hr/>
+<h2>九、结语：世界仍不完美，我们将永远前进</h2>
+<p>本文把"存在"从一个哲学直觉，升级为一套可系统化、可计算、可迭代的形式框架：</p>
+<ul>
+<li><strong>系统化</strong>体现在前提、公理、引理、定理与领域模型的清晰分层；</li>
+<li><strong>可计算</strong>体现在存在判据 Ex 的三项合取与周期、惯性、生命期的无量纲化指标；</li>
+<li><strong>可迭代</strong>体现在关系产物生成、A7 迭代保留算子，以及理论自身的元层自迭代闭环。</li>
+</ul>
+<p>存在不是最基础的粒子，而位于世界的任何层级，其规律通用且适用于理论本身。世界统一原理由此从一句断言，变为一个可被检验、可被挑战、可被修订的研究程序。</p>
+<p>世界仍不完美，我们将永远前进——<strong>不止于此</strong>。</p>
+<hr/>
+<h2>参考文献</h2>
+<ol>
+<li>毛泽东：《矛盾论》，载《毛泽东选集》第 2 版第 1 卷，北京：人民出版社，1991。</li>
+<li>Whitehead, A. N. <em>Process and Reality</em>, corrected ed., Free Press, 1978.</li>
+<li>Simon, H. A. "The Architecture of Complexity." <em>Proc. Amer. Philos. Soc.</em> 106(6), 1962.</li>
+<li>Szathmáry, E., &amp; Maynard Smith, J. "The Major Evolutionary Transitions." <em>Nature</em> 374, 1995.</li>
+<li>Ganter, B., &amp; Wille, R. <em>Formal Concept Analysis</em>, Springer, 1999.</li>
+<li>Kivelä, M., et al. "Multilayer Networks." <em>J. Complex Networks</em> 2(3), 2014.</li>
+</ol>
+</div>
+</body>
+</html>

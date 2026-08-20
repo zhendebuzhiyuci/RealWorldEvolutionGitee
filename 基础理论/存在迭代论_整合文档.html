@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>存在迭代论 · 整合文档（初稿 → 系统化定义 → 公式化升级稿 3.3）</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+<style>
+:root {
+  --ink: #1a2233;
+  --muted: #5d6b82;
+  --accent: #216f8f;
+  --accent-2: #6c5795;
+  --gold: #bd7c18;
+  --teal: #2e7a68;
+  --red: #b2554c;
+  --bg: #f7f5f0;
+  --card: #fffdf8;
+  --line: rgba(26,34,51,.12);
+  --blue-soft: #e5f1f5;
+  --gold-soft: #fbefd8;
+  --teal-soft: #e3f1eb;
+  --purple-soft: #eee9f7;
+  --red-soft: #f8e7e4;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Noto Serif SC", "Songti SC", "SimSun", Georgia, serif;
+  line-height: 1.85; font-size: 17px;
+}
+.wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+
+/* 目录导航 */
+.toc-bar { position: sticky; top: 0; z-index: 50; background: rgba(247,245,240,.94); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+.toc-bar .wrap { display: flex; flex-wrap: wrap; gap: .2rem; align-items: center; min-height: 52px; }
+.toc-bar a { color: var(--muted); text-decoration: none; padding: .4rem .6rem; border-radius: 8px; font-size: .84rem; font-family: "Microsoft YaHei", sans-serif; }
+.toc-bar a:hover { color: var(--accent); background: var(--blue-soft); }
+
+/* 封面 */
+.cover { padding: 80px 0 56px; border-bottom: 1px solid var(--line); text-align: center; }
+.cover .eyebrow { color: var(--accent); font-size: .82rem; font-weight: 800; letter-spacing: .18em; margin-bottom: 1rem; font-family: "Microsoft YaHei", sans-serif; }
+.cover h1 { font-size: 2.6em; line-height: 1.2; margin: 0 0 .6rem; letter-spacing: .02em; font-family: "Microsoft YaHei", "Noto Sans SC", sans-serif; }
+.cover .subtitle { color: var(--muted); max-width: 720px; margin: 0 auto; font-size: 1.05em; }
+.cover .author { margin-top: 1.2rem; color: var(--ink); font-size: 1.05em; }
+.cover .author strong { font-size: 1.15em; }
+.cover .meta-tags { display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; margin-top: 1.6rem; }
+.tag { padding: .3rem .75rem; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--muted); font-size: .82rem; font-family: "Microsoft YaHei", sans-serif; }
+
+/* 文档来源索引 */
+.source-index { margin: 40px 0 8px; }
+.source-card { display: block; padding: 16px 20px; margin: 10px 0; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 12px; background: var(--card); color: var(--ink); text-decoration: none; }
+.source-card:hover { background: var(--blue-soft); }
+.source-card b { font-family: "Microsoft YaHei", sans-serif; }
+.source-card span { display: block; color: var(--muted); font-size: .86em; margin-top: 2px; }
+
+/* 章节 */
+section.doc { margin: 34px 0; padding: clamp(24px, 4vw, 40px); background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 8px 30px rgba(26,45,61,.05); scroll-margin-top: 70px; }
+.part-banner { margin: 44px 0 20px; padding: 18px 22px; border-radius: 14px; background: linear-gradient(135deg, var(--ink), #2a3a52); color: #fff; }
+.part-banner h2 { margin: 0; font-family: "Microsoft YaHei", sans-serif; }
+.part-banner p { margin: .3rem 0 0; color: rgba(255,255,255,.72); font-size: .88em; }
+
+h1, h2, h3, h4 { font-family: "Microsoft YaHei", "Noto Sans SC", sans-serif; }
+h2 { font-size: 1.5em; color: var(--accent); border-bottom: 2px solid var(--line); padding-bottom: 8px; margin: 36px 0 16px; }
+h2.no-line { border-bottom: none; }
+h3 { font-size: 1.14em; margin: 26px 0 10px; color: #2a3a52; }
+h4 { font-size: 1.02em; margin: 20px 0 8px; color: #2a3a52; }
+p { margin: 13px 0; text-align: justify; }
+strong { color: #111; }
+blockquote {
+  margin: 18px 0; padding: 14px 22px; background: var(--blue-soft);
+  border-left: 4px solid var(--accent); color: #2a3a52; border-radius: 0 8px 8px 0;
+}
+blockquote.core {
+  background: var(--ink); color: #fff; border-left: 4px solid #a8d9e7;
+  font-family: "STKaiti", "KaiTi", serif; font-size: 1.35em; line-height: 1.5; text-align: center; padding: 22px;
+}
+blockquote.core strong { color: #fff; }
+
+.math { text-align: center; margin: 20px auto; padding: 12px 18px; background: #fafaf6; border: 1px solid #ecece6; border-radius: 8px; overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; margin: 20px 0; background: var(--card); font-size: .94em; }
+th, td { border: 1px solid #ddd; padding: 9px 13px; text-align: left; vertical-align: top; }
+th { background: #f0f3f6; font-family: "Microsoft YaHei", sans-serif; font-weight: 700; }
+tbody tr:nth-child(even) { background: #fafafa; }
+ul, ol { margin: 13px 0; padding-left: 26px; }
+li { margin: 6px 0; }
+hr { border: none; border-top: 1px solid #e2e2dc; margin: 30px 0; }
+
+/* 卡片类组件 */
+.grid { display: grid; gap: 14px; margin: 18px 0; }
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.card { padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.card b { display: block; margin-bottom: .3rem; font-family: "Microsoft YaHei", sans-serif; color: var(--accent); }
+.card p { margin: 0; color: var(--muted); font-size: .86em; text-align: left; }
+.premise { padding: 16px; border-top: 4px solid var(--accent); border-radius: 12px; background: var(--blue-soft); }
+.premise:nth-child(2) { border-top-color: var(--gold); background: var(--gold-soft); }
+.premise:nth-child(3) { border-top-color: var(--teal); background: var(--teal-soft); }
+.premise h3 { margin: 0 0 .3rem; font-size: 1.02rem; }
+.premise p { margin: 0; color: var(--muted); font-size: .9em; text-align: left; }
+
+.axiom-card { padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); border-top: 4px solid var(--accent); }
+.axiom-card .a-no { color: var(--accent); font-weight: 800; font-size: .82rem; font-family: "Microsoft YaHei", sans-serif; }
+.axiom-card h3 { margin: .4rem 0 .3rem; font-size: 1rem; }
+.axiom-card p { margin: 0; color: var(--muted); font-size: .82em; text-align: left; }
+.axiom-card .formula { margin-top: 8px; padding: 8px 10px; border-left: 3px solid var(--accent); background: #fafaf6; color: #2a3a52; font-family: "Cambria Math", "Times New Roman", serif; font-size: .88em; overflow-wrap: anywhere; }
+
+.lemma-card { padding: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); border-top: 4px solid var(--teal); }
+.lemma-card h3 { margin: 0 0 .4rem; font-size: .98rem; }
+.lemma-card p { margin: 0; color: var(--muted); font-size: .84em; text-align: left; }
+.lemma-card .stmt { color: var(--ink); font-weight: 600; margin: .3rem 0; }
+
+.rule-strip { margin: 16px 0; padding: 12px 18px; border-left: 4px solid var(--accent-2); background: var(--purple-soft); color: var(--muted); font-size: .9em; }
+.rule-strip strong { color: var(--accent-2); }
+
+.detail-panel { margin: 16px 0; padding: 18px 20px; border-radius: 14px; background: var(--ink); color: #fff; }
+.detail-panel h3 { color: #fff; margin-top: 0; }
+.detail-panel p { color: rgba(255,255,255,.8); }
+.detail-panel .formula { margin-top: 10px; padding: 10px 12px; border-left: 3px solid #a8d9e7; background: rgba(0,0,0,.2); color: #effaff; font-family: "Cambria Math", serif; }
+
+/* 流程图 */
+.flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 18px 0; }
+.flow-node { padding: 10px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--blue-soft); font-family: "Microsoft YaHei", sans-serif; font-size: .9em; color: var(--accent); font-weight: 700; }
+.flow-arrow { color: var(--accent); font-weight: 800; }
+.flow-node.gold { background: var(--gold-soft); color: var(--gold); }
+.flow-node.teal { background: var(--teal-soft); color: var(--teal); }
+.flow-node.purple { background: var(--purple-soft); color: var(--accent-2); }
+
+/* SVG */
+.svg-wrap { margin: 18px 0; padding: 12px; border-radius: 16px; background: linear-gradient(145deg, rgba(229,241,245,.5), rgba(255,253,248,.3)); overflow-x: auto; }
+.svg-wrap svg { display: block; width: 100%; height: auto; min-width: 640px; }
+svg text { font-family: "Microsoft YaHei", Arial, sans-serif; }
+.gen-svg .ring { fill: none; stroke: #c8dce3; stroke-width: 2; stroke-dasharray: 7 8; }
+.gen-svg .node rect { stroke-width: 1.8; rx: 16; }
+.gen-svg .node text { text-anchor: middle; font-weight: 800; font-size: 18px; }
+.gen-svg .node .sub { font-size: 13px; font-weight: 400; fill: var(--muted); }
+.gen-svg .n1 rect { fill: var(--gold-soft); stroke: var(--gold); }
+.gen-svg .n2 rect { fill: var(--blue-soft); stroke: var(--accent); }
+.gen-svg .n3 rect { fill: var(--teal-soft); stroke: var(--teal); }
+.gen-svg .n4 rect { fill: var(--purple-soft); stroke: var(--accent-2); }
+.gen-svg .n5 rect { fill: var(--red-soft); stroke: var(--red); }
+.gen-svg .arrow { fill: none; stroke: var(--accent); stroke-width: 3; marker-end: url(#arrow); }
+.gen-svg .feedback { fill: none; stroke: var(--accent-2); stroke-width: 2.5; stroke-dasharray: 8 7; marker-end: url(#arrow-p); }
+.gen-svg .caption { text-anchor: middle; fill: var(--muted); font-size: 14px; }
+.network-svg .edge { fill: none; stroke: var(--accent); stroke-width: 2.4; marker-end: url(#n-arrow); }
+.network-svg .back { fill: none; stroke: var(--accent-2); stroke-width: 2.2; stroke-dasharray: 7 6; marker-end: url(#n-arrow-p); }
+.network-svg .node rect { stroke-width: 1.5; rx: 14; }
+.network-svg .node text { text-anchor: middle; font-size: 16px; font-weight: 800; }
+.network-svg .node .sub { font-size: 11px; font-weight: 400; fill: var(--muted); }
+.network-svg .matter rect { fill: var(--blue-soft); stroke: var(--accent); }
+.network-svg .life rect { fill: var(--teal-soft); stroke: var(--teal); }
+.network-svg .society rect { fill: var(--gold-soft); stroke: var(--gold); }
+.network-svg .knowledge rect { fill: var(--purple-soft); stroke: var(--accent-2); }
+.network-svg .economy rect { fill: var(--red-soft); stroke: var(--red); }
+.network-svg .label { fill: var(--muted); font-size: 13px; }
+.loop-svg .ring { fill: none; stroke: #c8dce3; stroke-width: 2; stroke-dasharray: 7 8; }
+.loop-svg .edge { fill: none; stroke: var(--accent); stroke-width: 3; marker-end: url(#loop-arrow); }
+.loop-svg .node rect { stroke-width: 1.5; rx: 15; }
+.loop-svg .node text { text-anchor: middle; font-size: 17px; font-weight: 800; }
+.loop-svg .node .sub { font-size: 12px; font-weight: 400; fill: var(--muted); }
+.loop-svg .l1 rect, .loop-svg .l7 rect { fill: var(--blue-soft); stroke: var(--accent); }
+.loop-svg .l2 rect, .loop-svg .l6 rect { fill: var(--gold-soft); stroke: var(--gold); }
+.loop-svg .l3 rect, .loop-svg .l5 rect { fill: var(--teal-soft); stroke: var(--teal); }
+.loop-svg .l4 rect { fill: var(--purple-soft); stroke: var(--accent-2); }
+
+/* 脑图 */
+.mindmap { display: grid; grid-template-columns: 1fr 190px 1fr; gap: 16px; align-items: stretch; margin: 20px 0; }
+.mind-col { display: grid; gap: 10px; align-content: start; }
+.hub { align-self: center; display: grid; place-items: center; min-height: 170px; padding: 16px; border-radius: 50%; background: var(--ink); color: #fff; text-align: center; }
+.hub strong { display: block; font-family: "STKaiti", "KaiTi", serif; font-size: 1.4rem; color: #fff; }
+.hub span { display: block; margin-top: .3rem; color: rgba(255,255,255,.72); font-size: .8rem; }
+.branch { border: 1px solid var(--line); border-radius: 12px; background: var(--card); overflow: hidden; }
+.branch summary { display: grid; grid-template-columns: 30px 1fr 20px; gap: 8px; align-items: center; padding: 10px 12px; cursor: pointer; list-style: none; font-weight: 800; font-family: "Microsoft YaHei", sans-serif; font-size: .92em; }
+.branch summary::-webkit-details-marker { display: none; }
+.branch-no { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--blue-soft); color: var(--accent); font-size: .75rem; }
+.branch summary::after { content: "⌄"; color: var(--muted); }
+.branch[open] summary::after { transform: rotate(180deg); }
+.branch-detail { padding: 0 12px 10px 50px; color: var(--muted); font-size: .82em; }
+.branch-detail ul { margin: .2rem 0 0; padding-left: 1rem; }
+
+footer { margin-top: 40px; padding: 24px 0 50px; border-top: 1px solid var(--line); color: var(--muted); font-size: .82em; text-align: center; }
+
+@media (max-width: 860px) {
+  .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mindmap { grid-template-columns: 1fr; }
+  .hub { order: -1; min-height: 110px; border-radius: 16px; }
+}
+@media (max-width: 560px) {
+  body { font-size: 15.5px; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .cover h1 { font-size: 1.9em; }
+  section.doc { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="toc-bar">
+  <div class="wrap">
+    <a href="#overview">总览</a>
+    <a href="#part1">一 · 初稿</a>
+    <a href="#part2">二 · 系统化定义</a>
+    <a href="#part3">三 · 公式化 3.3</a>
+    <a href="#part4">四 · 可视化与脑图</a>
+    <a href="#appendix">附录</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <header class="cover">
+    <p class="eyebrow">存在迭代论 · 完整整合版</p>
+    <h1>存在迭代论</h1>
+    <p class="subtitle">从「我们如何认识世界」，走向「存在如何被定义、被计算、被迭代，并生成新的层级」——整合初稿、系统化定义与公式化升级稿 3.3 的完整理论文档。</p>
+    <div class="author">作者：<strong>高兆华</strong></div>
+    <div class="meta-tags">
+      <span class="tag">世界底层公理体系</span>
+      <span class="tag">最大包涵 · 最小规则</span>
+      <span class="tag">对象 · 实体 · 关系</span>
+      <span class="tag">自迭代闭环</span>
+    </div>
+  </header>
+
+  <!-- ============ 总览 ============ -->
+  <section id="overview" class="doc">
+    <h2 class="no-line" style="margin-top:0;">文档总览与来源</h2>
+    <p>本整合文档收录了《存在迭代论》从初稿到 3.3 版公式化升级的全部核心内容，共整合 6 份原始文件，按理论演进脉络组织为四个部分。</p>
+
+    <blockquote class="core"><strong>存在是与外界保持相互作用、保持持续不断复现的过程系统。</strong></blockquote>
+
+    <p>这是贯穿全篇、历版不变的核心定义。围绕它，理论依次展开：<strong>相对性（现实起点）→ 平等（客观要求）→ 过程与历史（动态视角）→ 定义存在 → 不完美性 → 周期性 → 迭代演化 → 世界统一</strong>。</p>
+
+    <div class="source-index">
+      <h3>原始文件清单</h3>
+      <a class="source-card" href="#part1"><b>① 存在的定义及世界统一原理.pdf</b><span>初稿（7 章）——理论最初的完整表述，奠定三项前提、存在定义与迭代演化的骨架。</span></a>
+      <a class="source-card" href="#part2"><b>② 对存在进行系统化、可计算、可迭代的定义（pdf/html）</b><span>将「存在」升级为可形式化、可测量、可修订的对象，引入存在判据与七条公理。</span></a>
+      <a class="source-card" href="#part3"><b>③ 存在迭代的公式化升级稿_3.3.docx</b><span>最新版本，补齐 31 条引理、符号表、跨层桥接与理论自迭代闭环（A7 元层实现）。</span></a>
+      <a class="source-card" href="#part4"><b>④ 存在迭代论_公式化_3.3_示意图与脑图.html</b><span>3.3 版可视化脑图，含总流程图、七公理、生成网络与自迭代闭环图。</span></a>
+      <a class="source-card" href="#part4"><b>⑤ 存在迭代论_存在的定义示意图与脑图.pdf</b><span>初稿版可视化脑图，含因果反馈环、多层构造链与章节脑图。</span></a>
+    </div>
+  </section>
+
+  <!-- ============ 第一部分：初稿 ============ -->
+  <div class="part-banner" id="part1"><h2>第一部分 · 初稿：存在的定义及世界统一原理</h2><p>理论的源头。以相对性认知为起点，定义存在，推演不完美性、周期性、迭代演化，最终到达世界统一原理。</p></div>
+
+  <section class="doc">
+    <h2 style="margin-top:0;">摘要</h2>
+    <p>本文从我们对现实世界认知的相对性出发，明确我们的认知处于由世界形成、又来认知世界的中间状态。唯有不断迭代地探索与我们相互作用的系统，才能更深入地理解我们的世界。对于哲学的核心问题「存在」，也符合这样的特征：<strong>存在是与外界保持相互作用，保持持续不断复现的过程中系统</strong>。由此分析存在的不完美性、周期性、迭代演化。我们得知存在是一个生命体，永生不存在。世界原理得以统一，统一从量子到宇宙的物质世界、个人到社会以及知识产物的精神世界规律。</p>
+    <p><strong>关键词：</strong>相对性；存在；周期；迭代演化；统一原理；惯性；不完美</p>
+
+    <h2>一、认知世界的相对性</h2>
+    <h3>1.1 我们由世界形成，反过来认知世界</h3>
+    <p>这是我们人类现在的实际情况，同样也是地球生物的现实情况，也是未来 AI 的现实情况，也是未知的外星人的现实情况。就像我们位于不知道多少层的高楼上，周围楼层林立，我们只知道我们在中间楼层，看不到最高层，也看不到最底层。</p>
+    <h3>1.2 我们的认知依赖于与我们相互作用的系统</h3>
+    <p>眼耳口鼻舌是我们最直接的接收器官，不停地与世界的光线、声波、温度、气味、味道进行着相互作用。我们学会了使用工具，间接探测世界的时间、距离、温度、压力、重量等；间接发现了微观生命、微观粒子、宏观星球、宏观宇宙。我们的语言、知识、社会规则在于社会的不断交互中，学习成长，反过来再促进语言、知识、社会规则的演进。</p>
+    <h3>1.3 我们的一切认知都不是客观世界，认知在到达客观世界的过程中演化</h3>
+    <p>只有与我们发生了相互作用的系统，我们才能对其获得认知，我们的认知水平取决于我们对世界的探索范围。科技、社会的不断发展，与外界系统相互作用范围不断扩大、不断深入，使我们认知的不断迭代、演化。我们的认知没有尽头，只在达到真正客观世界的过程中。</p>
+    <h3>1.4 认知和世界是迭代演化的，我们追求的世界原理也应具有这样的能力</h3>
+    <p>认知来源于世界，又属于构成世界的一部分。世界时刻处于作用于反作用的动态演化中。我们追求的世界原理也在这样的规则其中，我们也应主动来承接这个担当，具备这种能力。</p>
+    <h3>1.5 对我们的认知而言，这个世界是相对的，没有绝对不变的系统，没有绝对不变的规则</h3>
+
+    <h2>二、定义存在</h2>
+    <h3>2.1 存在来源于相互作用</h3>
+    <p>我们产生的认知来源于与我们发生的相互作用的系统。我们所认识到的科学规律、社会规律、文化规律等一切人类认知，都源于直接或间接与我们的相互作用。如果没有相互作用，这个系统对这个世界没有意义，我们就可以称为不存在。</p>
+    <h3>2.2 存在需要保持不断复现、相对稳定的周期</h3>
+    <p>如果一个系统只运行一次，我们既不知道他是否完成，也就不知道他将如何运行，无法确定与他的相互作用。万事万物都建立在相对稳定的周期之上。我们这个世界是相对的，没有恒定的周期。</p>
+    <h3>2.3 存在是一个系统</h3>
+    <p>存在需要与外界保持相互作用，保持不断复现。需要有内部组织，需要有内部规则来完成对外相互作用和相对稳定的复现。所以我们称存在是一个系统。</p>
+    <h3>2.4 存在的定义</h3>
+    <blockquote class="core">存在是与外界保持相互作用，保持持续不断复现的过程中系统。</blockquote>
+
+    <h2>三、存在的不完美性</h2>
+    <h3>3.1 追究存在系统与外界保持相互作用的缘由，说明存在内部组织不完美</h3>
+    <p>一个内部完美的系统无需与外界相互作用，没有相互作用这样的存在系统也就不被可知，也就不存在。</p>
+    <h3>3.2 不完美是存在的特性，来看世界各级别的存在系统</h3>
+    <p>无论量子如何探测，总有不确定性；无论对宇宙如何描绘，都不可达宇宙的全貌；无论个人如何成功，总有抱憾之念。圆周率 π 是一个无限不循环实数——自然界中只要有「周期性、旋转、波动、振动」，必然出现 π。</p>
+    <h3>3.3 不完美性驱动存在系统与外界发生相互作用，不完美是世界万物运行的动力</h3>
+    <p>毛主席的《矛盾论》说，辩证法宇宙观主张从事物内部矛盾与外部联系的统一中发展，内因是变化的根据，外因是变化的条件。不完美性驱动系统不断寻求平衡，从而产生变化与演进。每一次交互都是对完美的逼近，但完美不可抵达，故运动不止。<strong>不完美不是缺陷，而是存在的必要条件。</strong></p>
+
+    <h2>四、存在的周期性</h2>
+    <h3>4.1 保持稳定的周期是存在的必然需求</h3>
+    <p>周期稳定是一切系统的生存底线，是发展的天花板：时间因周期稳定而存在；自然因周期稳定而孕育生命；生命因周期稳定而健康存续；社会因周期稳定而安居乐业。</p>
+    <h3>4.2 存在有保持稳定周期的能力，一切存在都具有惯性</h3>
+    <p>存在保持相对稳定的周期，就是保持存在本身。从牛顿第一、第二定律到相对论、量子力学、弦理论，物理对象的活动特征都存在相对稳定的周期；数学、化学、医学、工程、政治、经济、文化等一切人类认知，对对象的解析都满足稳定的周期性。</p>
+    <h3>4.3 存在的惯性大小，取决于存在的周期频率层级和存在内部组织关系</h3>
+    <p>存在的周期频率越高，惯性越大；存在的内部组织关系越紧密，惯性越大。反之越小。</p>
+    <h3>4.4 存在在外部被改变需要打破存在的惯性，有阻力</h3>
+    <p>改变一个人的习惯很难，改变一个人的思维方式也很难，改变一个旧的社会制度更难——这是规律本身，不仅取决于主观能动性。</p>
+    <h3>4.5 存在的周期性终究会被打破，由新的存在替代</h3>
+    <p>存在的周期性终究会被打破，由新的更高效的存在相互关系代替。当存在的周期性被打破时，存在的生命期便结束了。量子世界、地球上的生物、恒星、星系都存在生命期。</p>
+
+    <h2>五、存在的迭代演化</h2>
+    <h3>5.1 存在的迭代演化过程</h3>
+    <p>存在的不完美性使得存在与外界存在相互作用，以弥补自身的不完美。这种相互作用形成的组织又成为新的存在。新的存在的不完美性又需要继续与上层的外界存在相互作用……如此迭代演化。在这个组合迭代的过程中诞生了引力子、夸克粒子、核子、电子、原子、分子，进而产生高分子、有机高分子、细胞生物、多细胞、神经生物个体、生物种群，由此人类诞生，工具、种族、国家、制度、文化、科技历经一系列迭代演化。精神、知识、信息、意识等都是存在的迭代产物，同样也是存在，遵守存在的规律，包括本文的理论本身。</p>
+    <h3>5.2 新的存在塑造成为保障原始存在周期稳定性的生存环境</h3>
+    <p>存在与外界的相互作用形成新的存在组织，这新的存在便是原始存在组织形成的生存环境，在某一些方面保障原始存在的周期稳定性。</p>
+    <h3>5.3 存在的迭代演化方向为高频到低频</h3>
+    <p>上层的存在周期由底层的存在周期叠加而成，因此上层的存在周期最少应为底层存在周期的最小公倍数。任意数字一定小于等于它与数字的最小公倍数，因此存在的迭代演化方向为高频到低频。</p>
+    <h3>5.4 同频的存在迭代更加紧密，能量也就越大，也就是同频共振</h3>
+    <p>同样频率的存在迭代在一起，周期更小，惯性越强，稳定性也更高。所以我们的世界中大量的物体倾向于同种物质的汇聚。</p>
+    <h3>5.5 存在的环境的频率决定了环境内存在的下限</h3>
+    <p>存在的环境频率一定小于存在的频率。原子内电子的频率，只有一定频率的光才能产生光电效应；太阳内的频率下，不可能有分子甚至有机分子的存在。</p>
+    <h3>5.6 存在的不完美度越小，惯性越强，生命期越长</h3>
+    <p>存在所迭代生成的上层系统就越稳固。存在的不完美度越大，惯性越差，生命期越短，两者成反比。</p>
+    <h3>5.7–5.8 迭代演化是一个从无到有的过程，伴随竞争、冲突、捕食</h3>
+    <p>高层级存在的产生是一个从无到有的过程，有一个生长、强盛和衰弱的过程；迭代演化中伴随竞争、冲突、捕食。</p>
+
+    <h2>六、存在是一个生命体</h2>
+    <p>存在的周期性终究会被打破，也就是说一个存在有着从无到有的过程，有着成长、强盛、衰败和死亡的过程，有着完整的生命期，因此我们说<strong>存在是一个生命体</strong>。世界的万事万物都可以看作生命体。世界的迭代演化来自存在的新陈代谢，生生不息，也可以说来自存在系统的自组织、主动进化——这是打开世界统一原理的大门。</p>
+
+    <h2>七、世界统一原理</h2>
+    <p>相对性是我们所处世界的现实情况；迭代演化是我们追求认知的必然途径。存在是世界的共性，一切的出发点由存在开始。存在是一个生命体，世界万物的规律将统一。存在不是最基础的粒子或者单元，存在位于世界的任何层级，存在的规律也将通用，同样也适用于我们的理论本身。</p>
+    <ul>
+      <li>不完美性是存在运行的动力；</li>
+      <li>周期迭代是存在运行的规律；</li>
+      <li>相对稳定的周期是存在的基础；</li>
+      <li>发展是硬道理，迭代演化、生命的成长迭代是规律；</li>
+      <li>存在必然需要构建上层环境，也可以说涌现是必然；</li>
+      <li>人类命运共同体的构建是必然。</li>
+    </ul>
+    <blockquote>世界仍不完美，我们将永远前进，不止于此。</blockquote>
+  </section>
+
+  <!-- ============ 第二部分：系统化定义 ============ -->
+  <div class="part-banner" id="part2"><h2>第二部分 · 对存在进行系统化、可计算、可迭代的定义</h2><p>把「存在」从哲学直觉升级为可形式化、可测量、可修订的对象——引入存在判据 Ex 与七条公理。</p></div>
+
+  <section class="doc">
+    <h2 style="margin-top:0;">摘要</h2>
+    <p>「存在」是哲学的核心问题，却长期停留在直觉与思辨层面。本文试图把它升级为一个可以系统化表述、可以计算检验、可以持续迭代的形式对象。核心结论是——存在不是某种终极实体，而是「与外界保持相互作用、保持持续不断复现的过程系统」；这一定义可被写成边界可区分度、过程保持度、作用通道条件三项合取的可计算判据，并进一步通过关系产物与迭代保留机制，支撑起跨层级的生成、检验与理论自迭代闭环。</p>
+
+    <h2>一、引言</h2>
+    <p>我们身处世界内部认识世界。任何关于「存在」的论断，都无法脱离观察者所处的层级、尺度与历史而获得绝对意义。本文的目标是把「存在」升级为一个<strong>系统化、可计算、可迭代</strong>的形式对象：</p>
+    <ul>
+      <li><strong>系统化</strong>：明确前提、公理、引理与定理的层级，厘清「先信什么、再推什么」；</li>
+      <li><strong>可计算</strong>：把定义写成带阈值、可测量的判据公式；</li>
+      <li><strong>可迭代</strong>：让存在系统（包括理论自身）在差异输入下进入下一轮保留、修订或回退。</li>
+    </ul>
+
+    <h2>二、现实起点：三项前提</h2>
+    <div class="grid grid-3">
+      <div class="premise"><h3>（一）相对性</h3><p>人处在世界内部认识世界。一个完整命题应写为 P(Σ | r, λ, J, ε)。相对性要求补全条件，而不是取消客观性。</p></div>
+      <div class="premise"><h3>（二）平等</h3><p>去除人类中心主义与对象等级偏见，使对象、实体与关系获得同等研究资格，接受同一形式的存在判据 Ex。</p></div>
+      <div class="premise"><h3>（三）过程与历史</h3><p>从形成、维持、变化与终止观察事物。x(t+Δt) = F[x(t), e(t), Γ(t); H_t]。当前状态是既往相互作用积累的阶段性结果。</p></div>
+    </div>
+
+    <h2>三、系统化的核心：存在的定义与形式对象</h2>
+    <blockquote class="core">存在是与外界保持相互作用、保持持续不断复现的过程系统。</blockquote>
+    <p>在层级 ℓ、尺度 λ 和时间窗 J 内，候选存在被写为一个五元组：</p>
+    <div class="math">\[\Sigma^{(\ell)} = \left( X,\, B,\, C,\, F,\, \Gamma \right)\]</div>
+    <ul>
+      <li><strong>X</strong>：状态空间；<strong>B</strong>：系统—环境边界；<strong>C</strong>：身份组织约束；<strong>F</strong>：状态转移规则；<strong>Γ</strong>：作用通道。</li>
+    </ul>
+    <p>候选域同时包含<strong>对象、实体、关系</strong>三类，三者可随参照与尺度转换角色。</p>
+    <div class="math">\[D_{\mathrm{cand}} = D_{\mathrm{object}} \cup D_{\mathrm{entity}} \cup D_{\mathrm{relation}}\]</div>
+    <p><strong>设计原则：最大包涵—最小规则。</strong>在一致性、可区分性与可检验性不受损的条件下，底层独立规则越少、领域约束越下沉，统一形式的覆盖范围越广。</p>
+
+    <h2>四、可计算：把定义写成可检验判据</h2>
+    <h3>（一）三个判据分量</h3>
+    <p>引入约束特征空间 Z、特征映射 φ_C、归一化度量 ρ 与目标集 C_*：</p>
+    <div class="math">\[\varphi_C: X \to Z, \quad \rho: Z \times Z \to [0,1], \quad d_C(x) := \inf_{z \in C_*} \rho\left( \varphi_C(x),\, z \right)\]</div>
+    <ol>
+      <li><strong>边界可区分度</strong> β_(λ,J)(Σ)∈[0,1]：系统与环境是否可区分；</li>
+      <li><strong>过程保持度</strong> Q_J(Σ)：观测窗内维持身份约束的时间占比；</li>
+      <li><strong>作用通道条件</strong> A_J(Σ,E)=1：存在能在 J 内留下可区分差异的作用通道。</li>
+    </ol>
+    <h3>（二）基础存在判据（合取结构）</h3>
+    <div class="math">\[Ex_{(\lambda,J)}(\Sigma) = 1 \Leftrightarrow \beta_{(\lambda,J)}(\Sigma) \ge \beta_0 \,\wedge\, Q_J(\Sigma) \ge q_0 \,\wedge\, A_J(\Sigma, E) = 1\]</div>
+    <p>阈值 β_0、q_0、ε_C 必须在观测前固定并记录；观测后修改阈值须作为新方案另立版本。</p>
+    <h3>（三）周期与惯性：可计算的维持能力</h3>
+    <div class="math">\[R_C(T) = 1 - \frac{1}{|J'(T)|} \int_{J'(T)} \min\left( 1,\, \rho\left( \varphi_C(x(t+T)),\, \varphi_C(x(t)) \right) \right)\,dt\]</div>
+    <div class="math">\[T_{\Sigma}=\arg\max_{T&gt;0}R_C(T),\quad f_{\Sigma}=\frac{1}{T_{\Sigma}}\]</div>
+    <blockquote>注意：频率、周期精度、稳定性与惯性是不同变量，不能脱离模型直接推出「频率越高，惯性越大」。</blockquote>
+
+    <h2>五、可迭代：七条公理与世界生成</h2>
+    <h3>（一）七条公理的最小生成链</h3>
+    <table>
+      <thead><tr><th>公理</th><th>名称</th><th>核心内容</th></tr></thead>
+      <tbody>
+        <tr><td>A1</td><td>关系索引</td><td>可检验属性经由与参照系统的作用通道确定，并相对尺度、时间窗、误差表述</td></tr>
+        <tr><td>A2</td><td>过程—历史同一性</td><td>同一性是关键组织约束 C 在连续更新中的复现</td></tr>
+        <tr><td>A3</td><td>相互作用证据</td><td>经验存在的肯定须有原则上能留下差异的因果或信息路径</td></tr>
+        <tr><td>A4</td><td>有限开放</td><td>有限现实系统至少部分依赖环境，非绝对自足、封闭、永恒</td></tr>
+        <tr><td>A5</td><td>差异—响应</td><td>状态变化来自可作用差异与系统响应规则的共同结果</td></tr>
+        <tr><td>A6</td><td>关系产物</td><td>真实相互作用产生可描述的关系产物 p</td></tr>
+        <tr><td>A7</td><td>迭代保留</td><td>改变下一轮状态/规则/边界/作用概率者被保留，否则衰减、解体或替代</td></tr>
+      </tbody>
+    </table>
+    <p>生成链为：<strong>关系索引 → 过程身份 → 作用证据 → 有限开放 → 差异响应 → 关系产物 → 迭代保留</strong>。</p>
+
+    <h3>（二）不完美性：迭代的根本动力</h3>
+    <p>A4（有限开放）是「不完美性」的公式基础：有限存在不是绝对封闭的，必须通过与环境持续作用维持自身。不完美性驱动系统寻求平衡、吸收外部信息能量以逼近完美——但完美不可抵达，故运动不止。<strong>不完美不是缺陷，而是存在的必要条件。</strong></p>
+
+    <h3>（三）迭代演化与上层生成</h3>
+    <div class="math">\[\left(\Sigma_i^{(\ell)}\right)\xrightarrow{\,\Gamma^{(\ell)}\,}p^{(\ell+1)}\xrightarrow{\,B,C,\Gamma,\ \beta\ge\beta_0,\ Q_J\ge q_0,\ A_J=1\,}\Sigma^{(\ell+1)}\rightsquigarrow\mathrm{feedback}\!\left(\Sigma_i^{(\ell)}\right)\]</div>
+    <p>新存在又通过反馈改变下层环境、边界与状态转移。</p>
+
+    <h3>（四）跨层约束（四项防过度外推）</h3>
+    <ul>
+      <li><strong>R1 相邻桥接</strong>：跨层主张须拆成可检验的相邻桥接模型；</li>
+      <li><strong>R2 涌现阈值</strong>：聚集 ≠ 组织，关系产物须跨过存在判据才成新层级；</li>
+      <li><strong>R3 载体—功能分离</strong>：载体存在不推出功能为独立存在，二者分别检验；</li>
+      <li><strong>R4 分支—反馈网络</strong>：层级生成是含同层、上行、下行的网络，非单向阶梯。</li>
+    </ul>
+
+    <h2>六、世界统一原理：递归生成网络</h2>
+    <div class="math">\[W_{n+1} = W_n \cup \bigcup_{\ell} G_{\ell}\left( W_n^{(\ell)},\, \Gamma_n^{(\ell)},\, e_n^{(\ell)} \right)\]</div>
+    <p><strong>世界统一原理统一的是生成程序，而非一条具体运动方程。</strong>对象、实体、关系共享「相互作用—关系产物—迭代保留—层级反馈」的最小逻辑接口，各领域自行定义参数与动力学。</p>
+    <p>由此得到广义生命体定义：任何具有可识别生成、维持、转变、衰弱与终止阶段的 Σ，都具有过程生命结构。</p>
+
+    <h2>七、理论自身的可迭代：元层自迭代闭环</h2>
+    <p>理论 T_n 作为知识存在，被 A1—A7 作用。九步执行程序：冻结当前版本 → 声明身份约束 → 收集差异 → 筛选可作用差异 → 分级（L0–L4）→ 生成候选 → 六维审查 → 决策 → 版本留痕。</p>
+    <div class="math">\[\mathrm{Decision}_T(n)\in\{\mathrm{retain},\mathrm{revise},\mathrm{branch},\mathrm{suspend},\mathrm{reject},\mathrm{rollback}\}\]</div>
+    <div class="math">\[\mathrm{Gate}_T=\mathrm{Consistency}\wedge\mathrm{Traceability}\wedge\mathrm{Testability}\wedge\mathrm{NonCircularity}\wedge\mathrm{Versionability}\]</div>
+
+    <h2>八、一条可执行的统一生成链</h2>
+    <div class="flow">
+      <span class="flow-node">相对性现实</span><span class="flow-arrow">→</span>
+      <span class="flow-node gold">平等观察</span><span class="flow-arrow">→</span>
+      <span class="flow-node teal">过程与历史</span><span class="flow-arrow">→</span>
+      <span class="flow-node">定义存在</span><span class="flow-arrow">→</span>
+      <span class="flow-node purple">不完美性</span><span class="flow-arrow">→</span>
+      <span class="flow-node gold">周期性</span><span class="flow-arrow">→</span>
+      <span class="flow-node teal">迭代演化</span><span class="flow-arrow">→</span>
+      <span class="flow-node">过程生命</span><span class="flow-arrow">→</span>
+      <span class="flow-node purple">世界统一</span>
+    </div>
+    <blockquote>世界仍不完美，我们将永远前进——<strong>不止于此</strong>。</blockquote>
+  </section>
+
+  <!-- ============ 第三部分：公式化 3.3 ============ -->
+  <div class="part-banner" id="part3"><h2>第三部分 · 公式化升级稿 3.3（理论自迭代闭环修正版）</h2><p>最新版本。补齐 31 条引理、核心符号表、跨层桥接模型与理论自迭代闭环（A7 元层实现）。</p></div>
+
+  <section class="doc">
+    <h2 style="margin-top:0;">摘要与总纲</h2>
+    <p>本文在初稿思想和推理次序基础上，对存在迭代论作公理化、公式化升级。理论先确立三项前提，随后定义存在，推导不完美性、周期性、迭代演化和世界统一原理。3.3 以 3.2 为 T_1 知识系统，补齐触发、分支、接受门槛、版本记录和回退规则。升级不改变核心定义：<strong>「存在是与外界保持相互作用、保持持续不断复现的过程系统。」</strong></p>
+    <div class="rule-strip"><strong>总纲 G0：</strong>从相对性现实出发，以平等去偏见，在过程与历史中观察；把对象、实体和关系纳入候选存在，以最少共同规则定义存在，再由不完美性、周期性和迭代演化说明世界生成。理论本身也必须接受差异、检验、修订和版本保留。</div>
+
+    <h2>一、三项前提与存在定义</h2>
+    <div class="grid grid-3">
+      <div class="premise"><h3>1.1 相对性</h3><p>任何存在命题都应说明关系、尺度、时间窗和误差条件：P(Σ | r, λ, J, ε)。</p></div>
+      <div class="premise"><h3>1.2 平等</h3><p>去除人类中心主义和对象等级偏见，所有候选存在接受同一形式的存在判据。</p></div>
+      <div class="premise"><h3>1.3 过程与历史</h3><p>x(t+Δt) = F[x(t), e(t), Γ(t); H_t]，同一性是关键组织约束在更新中的持续实现。</p></div>
+    </div>
+    <blockquote class="core">存在是与外界保持相互作用、保持持续不断复现的过程系统。</blockquote>
+    <div class="math">\[\Sigma^{(\ell)} = \left( X,\, B,\, C,\, F,\, \Gamma \right)\]</div>
+    <p>候选域：D_cand = D_object ∪ D_entity ∪ D_relation。最大包涵—最小规则：底层独立规则越少、领域约束越下沉，覆盖范围越广。</p>
+
+    <h2>二、七条基础公理</h2>
+    <p>七条公理不是七种领域定律，而是跨对象、实体和关系共同保留的最小接口。</p>
+    <div class="grid grid-2">
+      <div class="axiom-card"><span class="a-no">A1</span><h3>关系索引公理</h3><p>可检验属性通过对象与参照系统的作用通道被确定。</p><div class="formula">y_(Σ|r)^λ(t) = M_r^λ[x_Σ(t), Γ_(Σr)(t)] + η(t)</div></div>
+      <div class="axiom-card"><span class="a-no">A2</span><h3>过程—历史同一性公理</h3><p>同一性是关键组织约束 C 在连续更新中的复现。</p><div class="formula">d_C[x(t)] ≤ ε_C, t ∈ J</div></div>
+      <div class="axiom-card"><span class="a-no">A3</span><h3>相互作用证据公理</h3><p>经验存在的肯定须有原则上能留下差异的路径。</p><div class="formula">Ex_(经验)(Σ)=1 ⇒ 存在 Γ_(Σ↔r) ≠ ∅</div></div>
+      <div class="axiom-card"><span class="a-no">A4</span><h3>有限开放公理</h3><p>有限系统至少部分依赖环境，非绝对自足、封闭。</p><div class="formula">F 对 e、H 或 Γ_(Σ↔E) 至少一项有依赖</div></div>
+      <div class="axiom-card"><span class="a-no">A5</span><h3>差异—响应公理</h3><p>只有进入 Γ 且能改变 F 输出的差异才驱动本轮变化。</p><div class="formula">Δ_j∉Γ 或 F 对 Δ_j 不变 ⇒ Contr_j[Δx]=0</div></div>
+      <div class="axiom-card"><span class="a-no">A6</span><h3>关系产物公理</h3><p>真实作用改变参与者或关系时产生关系产物 p。</p><div class="formula">p_(ij)(t+Δt) = H[x_i(t), x_j(t), Γ_(ij)(t)]</div></div>
+      <div class="axiom-card"><span class="a-no">A7</span><h3>迭代保留公理</h3><p>改变下一轮状态/规则/边界者被保留，否则衰减或替代。</p><div class="formula">(x,B,C,Γ)_(n+1) = I(x_n,B_n,C_n,Γ_n,e_n,p_n)</div></div>
+      <div class="axiom-card"><span class="a-no">链</span><h3>最小生成链</h3><p>关系索引 → 过程身份 → 作用证据 → 有限开放 → 差异响应 → 关系产物 → 迭代保留。</p></div>
+    </div>
+
+    <h2>三、基础存在判据</h2>
+    <div class="math">\[Ex_{(\lambda,J)}(\Sigma) = 1 \Leftrightarrow \beta_{(\lambda,J)}(\Sigma) \ge \beta_0 \,\wedge\, Q_J(\Sigma) \ge q_0 \,\wedge\, A_J(\Sigma, E) = 1\]</div>
+    <p>阈值 β_0、q_0、ε_C 必须在观测前固定并记录；观测后修改阈值须作为新方案另立版本，不得回写为原方案成功。</p>
+
+    <h2>四、跨层级解释的四项约束</h2>
+    <div class="grid grid-2">
+      <div class="card"><b>约束 R1 · 相邻桥接</b><p>从 ℓ 层到 m 层（m&gt;ℓ+1）的主张，必须拆成可检验的相邻桥接模型。</p></div>
+      <div class="card"><b>约束 R2 · 涌现阈值</b><p>聚集 ≠ 组织；p 须满足 β≥β_0、Q_J≥q_0、A_J=1 才成新层级存在。</p></div>
+      <div class="card"><b>约束 R3 · 载体—功能分离</b><p>Ex(S)=1 不推出 Ex(φ_S)=1；实现关系写为 S ⊨ φ。</p></div>
+      <div class="card"><b>约束 R4 · 分支—反馈网络</b><p>层级生成是含同层、上行、下行的网络 𝒢_W=(V,E_same,E_up,E_down)，非单向阶梯。</p></div>
+    </div>
+
+    <h2>五、三十一条引理（按检验分组）</h2>
+    <p>引理不是无条件的宏大结论，而是由公理和附加条件推出的「在什么条件下能够得到什么」。</p>
+
+    <h3>检验一 · 认知世界的相对性（L1—L3）</h3>
+    <div class="grid grid-3">
+      <div class="lemma-card"><h3>引理 1 · 关系化命题</h3><p class="stmt">任何具体存在的经验陈述都必须是带条件的关系命题 P(Σ|r,λ,J,ε)。</p></div>
+      <div class="lemma-card"><h3>引理 2 · 认知边界</h3><p class="stmt">可认知域受作用通道、分辨率和时间窗限制；不能凭有限观测宣布获得无条件完整世界。</p></div>
+      <div class="lemma-card"><h3>引理 3 · 认知—理论迭代必要性</h3><p class="stmt">认知与理论必须允许新的可作用差异进入后续版本。</p></div>
+    </div>
+
+    <h3>检验二 · 定义存在（L4—L7）</h3>
+    <div class="grid grid-2">
+      <div class="lemma-card"><h3>引理 4 · 相互作用入口</h3><p class="stmt">相互作用是经验认识存在的必要入口，但当前没被探测到不等于绝对不存在。</p></div>
+      <div class="lemma-card"><h3>引理 5 · 判据合取结构</h3><p class="stmt">存在判据由可区分边界、过程同一性和相互作用能力三项条件合取构成。</p></div>
+      <div class="lemma-card"><h3>引理 6 · 内部组织</h3><p class="stmt">能跨越多个状态更新而维持身份的存在，必有持续实现 C 的内部组织关系。</p></div>
+      <div class="lemma-card"><h3>引理 7 · 复现身份</h3><p class="stmt">存在所复现的是关键组织约束，不必是全部材料和微观状态。</p></div>
+    </div>
+
+    <h3>检验三 · 存在的不完美性（L8—L11）</h3>
+    <div class="grid grid-2">
+      <div class="lemma-card"><h3>引理 8 · 有限非闭合</h3><p class="stmt">有限存在不能同时满足绝对封闭、绝对自足和永恒维持原组织。</p></div>
+      <div class="lemma-card"><h3>引理 9 · 不完美度操作化</h3><p class="stmt">不完美性可定义为偏离身份可行域并依赖外部补偿的程度：δ_C(t)=a·d̄_C+b·ḡ_C。</p></div>
+      <div class="lemma-card"><h3>引理 10 · 差异驱动</h3><p class="stmt">变化需要可作用差异和响应机制共同成立（A5 的直接推述）。</p></div>
+      <div class="lemma-card"><h3>引理 11 · 非目的性</h3><p class="stmt">不完美性引发的响应不必然趋向全局完美；ΔQ_J&gt;0 仅表示有利于当前身份维持。</p></div>
+    </div>
+
+    <h3>检验四 · 存在的周期性（L12—L17）</h3>
+    <div class="grid grid-2">
+      <div class="lemma-card"><h3>引理 12 · 复现一般性</h3><p class="stmt">持续复现是存在维持身份的一般要求，严格周期是复现的一种特殊情形。</p></div>
+      <div class="lemma-card"><h3>引理 13 · 特征周期</h3><p class="stmt">T_Σ = argmax_(T&gt;0) R_C(T)，且 R_C(T_Σ) ≥ r_0。</p></div>
+      <div class="lemma-card"><h3>引理 14 · 存在惯性</h3><p class="stmt">惯性是系统在扰动下保持或恢复 C 的能力。</p></div>
+      <div class="lemma-card"><h3>引理 15 · 改变阻力与阈值</h3><p class="stmt">改变存在需跨越身份约束可行域，阻力由组织关系、反馈、冗余和环境共同决定。</p></div>
+      <div class="lemma-card"><h3>引理 16 · 生命周期</h3><p class="stmt">L_Σ = t_end − t_birth，是身份约束首次稳定形成到不可恢复失效的区间。</p></div>
+      <div class="lemma-card"><h3>引理 17 · 频率—稳定—惯性分离</h3><p class="stmt">频率、周期精度、稳定性和惯性是不同变量，不能直接推出「频率越高惯性越大」。</p></div>
+    </div>
+
+    <h3>检验五 · 存在的迭代演化（L18—L26）</h3>
+    <div class="grid grid-2">
+      <div class="lemma-card"><h3>引理 18 · 关系产物</h3><p class="stmt">每次真实作用都产生关系状态，但并非每个关系产物都成为新存在。</p></div>
+      <div class="lemma-card"><h3>引理 19 · 上层存在形成</h3><p class="stmt">p 获得边界、身份约束、作用通道并被保留时，可在更粗层级形成新存在。</p></div>
+      <div class="lemma-card"><h3>引理 20 · 上层环境反馈</h3><p class="stmt">新存在会成为原有存在的环境、边界条件，并反向改变下层状态转移。</p></div>
+      <div class="lemma-card"><h3>引理 21 · 公共周期</h3><p class="stmt">共同精确复现周期由最小公倍数给出：T_* = lcm(n_1,…,n_k)τ_0。</p></div>
+      <div class="lemma-card"><h3>引理 22 · 高频到低频条件</h3><p class="stmt">T_* ≥ max(T_i) ⇒ f_* ≤ min(f_i)，仅在共同精确复现模型中成立。</p></div>
+      <div class="lemma-card"><h3>引理 23 · 同频迭代条件</h3><p class="stmt">同频只降低共同复现协调成本，不单独保证能量增加或稳定性提高。</p></div>
+      <div class="lemma-card"><h3>引理 24 · 环境兼容窗口</h3><p class="stmt">环境通过多维条件决定存在能否维持，频率只是其中一维。</p></div>
+      <div class="lemma-card"><h3>引理 25 · 不完美—惯性—生命期条件</h3><p class="stmt">「不完美度越小惯性越强生命期越长」是待检验条件模型，非无条件反比定律。</p></div>
+      <div class="lemma-card"><h3>引理 26 · 竞争—合作并生</h3><p class="stmt">迭代演化既可能表现为竞争冲突，也可能表现为合作共生、分工或中性共存。</p></div>
+    </div>
+
+    <h3>跨层与自迭代（L27—L31）</h3>
+    <div class="grid grid-2">
+      <div class="lemma-card"><h3>引理 27 · 跨层桥接必要性</h3><p class="stmt">跨层机制解释至少需定义 D_ℓ、Γ_ℓ、H_ℓ、I_ℓ、B/C/F、Θ 与反馈 Ψ_down。</p></div>
+      <div class="lemma-card"><h3>引理 28 · 分支非必然性</h3><p class="stmt">A1—A7 不推出唯一上层结果，也不推出必然向更复杂方向演化。</p></div>
+      <div class="lemma-card"><h3>引理 29 · 载体—功能非等价</h3><p class="stmt">Ex(S)=1 且 S⊨φ，不必然推出 Ex(φ)=1。</p></div>
+      <div class="lemma-card"><h3>引理 30 · 跨层解释闭合</h3><p class="stmt">跨层解释闭合要求每个相邻桥接 M_(k→k+1) 已定义且可检验。</p></div>
+      <div class="lemma-card"><h3>引理 31 · 理论自迭代闭合</h3><p class="stmt">Closure_T = Trace ∧ Locate ∧ Generate ∧ Compare ∧ Test ∧ Decide ∧ Version ∧ Rollback。</p></div>
+    </div>
+
+    <h2>六、存在是一个生命体</h2>
+    <p>「存在是一个生命体」采用广义过程定义：若 Σ 具有可识别的生成、维持、转变、衰弱和终止阶段，则具有过程生命结构：</p>
+    <div class="math">\[\mathrm{Life}_{ex}(\Sigma) = \left[ t_{\mathrm{birth}},\; t_{\mathrm{maintain}},\; t_{\mathrm{transform}},\; t_{\mathrm{end}} \right]\]</div>
+    <p>该定义不取消领域差异：生物生命仍需代谢、繁殖、遗传等条件；社会组织、恒星、制度和知识体系则以各自的 C、F、Γ 实现过程生命。</p>
+
+    <h2>七、世界统一原理：存在迭代生成定理</h2>
+    <blockquote><strong>定理。</strong>设第 ℓ 层存在经 Γ 发生可改变状态或关系的相互作用。A6 产生第 ℓ+1 层候选 p；若 p 经 A7 被多轮保留，形成边界 B、组织约束 C、作用通道 Γ，并满足 β≥β_0、Q_J≥q_0、A_J=1，则 p 构成新存在。</blockquote>
+    <div class="math">\[\left(\Sigma_i^{(\ell)}\right)\xrightarrow{\,\Gamma^{(\ell)}\,}p^{(\ell+1)}\xrightarrow{\,B,C,\Gamma,\ \beta\ge\beta_0,\ Q_J\ge q_0,\ A_J=1\,}\Sigma^{(\ell+1)}\rightsquigarrow\mathrm{feedback}\!\left(\Sigma_i^{(\ell)}\right)\]</div>
+    <div class="math">\[W_{n+1} = W_n \cup \bigcup_{\ell} G_{\ell}\left( W_n^{(\ell)}, \Gamma_n^{(\ell)}, e_n^{(\ell)} \right)\]</div>
+    <p><strong>世界统一原理统一的是生成程序，而不是一条具体运动方程。</strong></p>
+
+    <h3>五个推论</h3>
+    <ul>
+      <li><strong>推论 1 · 涌现形成</strong>：涌现是关系产物跨越存在判据阈值，不是数量增加自动产生奇迹。</li>
+      <li><strong>推论 2 · 具体存在非永恒</strong>：没有理由预设某一具体组织形式绝对永恒。</li>
+      <li><strong>推论 3 · 跨领域同构</strong>：各领域共享形式元组 Σ=(X,B,C,F,Γ)，但须重新定义状态、单位和证伪标准。</li>
+      <li><strong>推论 4 · 理论自包含与自迭代分层</strong>：T_0 描述世界，T_1 把 T_0 作为知识系统加以审查。</li>
+      <li><strong>推论 5 · 理论非终局</strong>：A7 不推出理论必然单调进步或唯一收敛；重大改变须公开判断是否重构理论身份。</li>
+    </ul>
+
+    <h2>八、跨层级贯通压力测试</h2>
+    <p>用「胶子—原子—有机分子—细胞—动物—人—智能—组织—经济」作为压力测试，检查每次跃迁是否满足统一生成语法，并暴露省略的桥接机制。</p>
+    <div class="rule-strip"><strong>关键修正：</strong>「胶子直接形成原子」并不准确，完整桥接需经过强子、质子和中子、原子核及电子—原子核束缚。人是动物的一个进化分支，智能是可实现的功能，经济由多种主体、制度和资源关系共同形成。</div>
+    <p>八段相邻桥接：夸克—胶子 → 原子 → 有机分子 → 细胞 → 动物 → 人 → 智能 → 组织 → 经济，每一段都必须填写统一接口 M_(ℓ→ℓ+1) = (D_ℓ, Γ_ℓ, H_ℓ, I_ℓ, B, C, F, Θ, Ψ_down)。</p>
+
+    <h2>九、理论自迭代的可执行闭环</h2>
+    <h3>九步执行程序</h3>
+    <ol>
+      <li>冻结当前版本 T_n、来源文本、时间窗、适用域与审查者；</li>
+      <li>声明当前 C_theory：前提角色次序、核心定义、分层；</li>
+      <li>收集内部矛盾、证据、复现失败、批评和替代模型；</li>
+      <li>筛选可追溯、能作用、可检验的差异 Δ_T^(n,*)；</li>
+      <li>分级 L0 记号 / L1 模型 / L2 引理 / L3 公理 / L4 前提定义；</li>
+      <li>生成保留现状、最小修订和至少一个替代候选；</li>
+      <li>执行一致性、忠实性、证据、可证伪性、最小性和跨层接口审查；</li>
+      <li>依硬门槛作出保留/修订/分支/暂缓/否决/回退决定；</li>
+      <li>保存 V_(n+1)：记录差异来源、修改位置、失败入口和下一轮问题。</li>
+    </ol>
+    <div class="math">\[\mathrm{Gate}_T=\mathrm{Consistency}\wedge\mathrm{Traceability}\wedge\mathrm{Testability}\wedge\mathrm{NonCircularity}\wedge\mathrm{Versionability}\]</div>
+    <div class="math">\[\mathrm{Decision}_T(n)\in\{\mathrm{retain},\mathrm{revise},\mathrm{branch},\mathrm{suspend},\mathrm{reject},\mathrm{rollback}\}\]</div>
+    <div class="rule-strip"><strong>自迭代闭环的完成条件：</strong>当前版本能说明来源、变更依据、失败条件、分支或回退方式，以及下一轮问题；这不是理论自证。</div>
+
+    <h2>十、结论</h2>
+    <div class="flow">
+      <span class="flow-node">相对性现实</span><span class="flow-arrow">→</span>
+      <span class="flow-node gold">平等观察</span><span class="flow-arrow">→</span>
+      <span class="flow-node teal">过程与历史</span><span class="flow-arrow">→</span>
+      <span class="flow-node">定义存在</span><span class="flow-arrow">→</span>
+      <span class="flow-node purple">不完美性</span><span class="flow-arrow">→</span>
+      <span class="flow-node gold">周期性</span><span class="flow-arrow">→</span>
+      <span class="flow-node teal">迭代演化</span><span class="flow-arrow">→</span>
+      <span class="flow-node">过程生命</span><span class="flow-arrow">→</span>
+      <span class="flow-node purple">世界统一</span>
+    </div>
+    <p>公式体系保留初稿的三项认识准绳，并把对象、实体和关系纳入候选存在域。升级后的严谨性集中在：明确前提次序；以最大包涵和最少规则扩大泛化；为命题固定关系、尺度、时间窗和误差；对复合指标无量纲化并预注册阈值；把跨层主张拆成相邻桥接；用 T_0/T_1 分层和 A7 闭环避免自我证明。</p>
+  </section>
+
+  <!-- ============ 第四部分：可视化与脑图 ============ -->
+  <div class="part-banner" id="part4"><h2>第四部分 · 可视化与脑图</h2><p>理论总流程图、七公理生成网络、跨层网络与自迭代闭环图。</p></div>
+
+  <section class="doc">
+    <h2 style="margin-top:0;">一、理论总流程</h2>
+    <p>横向表示从认识条件到世界递归网络的完整生成主线。</p>
+    <div class="flow">
+      <span class="flow-node">前提1 相对性</span><span class="flow-arrow">→</span>
+      <span class="flow-node gold">前提2 平等</span><span class="flow-arrow">→</span>
+      <span class="flow-node teal">前提3 过程与历史</span><span class="flow-arrow">→</span>
+      <span class="flow-node">定义存在 Σ</span><span class="flow-arrow">→</span>
+      <span class="flow-node purple">七公理 A1—A7</span><span class="flow-arrow">→</span>
+      <span class="flow-node gold">引理 L1—L31</span><span class="flow-arrow">→</span>
+      <span class="flow-node teal">新存在生成</span><span class="flow-arrow">→</span>
+      <span class="flow-node">世界递归</span><span class="flow-arrow">→</span>
+      <span class="flow-node purple">A7 自迭代</span>
+    </div>
+
+    <h2>二、存在迭代生成定理的反馈环</h2>
+    <p>不是「数量一多就自动涌现」，而是关系产物在后续轮次中被保留，并跨越边界、复现和作用能力的判据阈值。</p>
+    <div class="svg-wrap">
+      <svg class="gen-svg" viewBox="0 0 1000 520" role="img" aria-label="存在迭代生成定理的反馈环">
+        <defs>
+          <marker id="arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#216f8f"/></marker>
+          <marker id="arrow-p" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#6c5795"/></marker>
+        </defs>
+        <ellipse class="ring" cx="500" cy="255" rx="405" ry="205"/>
+        <path class="arrow" d="M245 150 C315 94, 367 86, 435 112"/>
+        <path class="arrow" d="M565 112 C648 92, 704 117, 752 164"/>
+        <path class="arrow" d="M801 254 C780 330, 716 365, 644 382"/>
+        <path class="arrow" d="M450 396 C360 414, 282 386, 227 322"/>
+        <path class="feedback" d="M650 430 C540 494, 360 490, 305 350"/>
+        <g class="node n1" transform="translate(105,105)"><rect width="210" height="92"/><text x="105" y="38">下层存在</text><text class="sub" x="105" y="65">Σ^(ℓ)：已有边界与组织</text></g>
+        <g class="node n2" transform="translate(390,62)"><rect width="220" height="92"/><text x="110" y="38">真实相互作用 Γ</text><text class="sub" x="110" y="65">改变状态、关系或概率</text></g>
+        <g class="node n3" transform="translate(700,128)"><rect width="210" height="92"/><text x="105" y="38">关系产物 p</text><text class="sub" x="105" y="65">A6 产生候选结构</text></g>
+        <g class="node n4" transform="translate(690,330)"><rect width="240" height="92"/><text x="120" y="38">保留 + 存在阈值</text><text class="sub" x="120" y="65">β≥β₀，Q≥q₀，A=1</text></g>
+        <g class="node n5" transform="translate(230,330)"><rect width="240" height="92"/><text x="120" y="38">新层级存在 Σ^(ℓ+1)</text><text class="sub" x="120" y="65">形成边界、身份与作用通道</text></g>
+        <text class="caption" x="500" y="253">A7：进入下一轮</text>
+        <text class="caption" x="500" y="279">上层再成为下层环境</text>
+      </svg>
+    </div>
+    <div class="math" style="border-left:3px solid var(--accent); background:var(--blue-soft);">(Σ_i^(ℓ)) →_Γ p^(ℓ+1) →_(B,C,Γ,β≥β₀,Q≥q₀,A=1) Σ^(ℓ+1) ⇝ feedback(Σ_i^(ℓ))</div>
+
+    <h2>三、跨层网络：从夸克—胶子作用到经济系统</h2>
+    <p>把「胶子 → 原子 → 有机分子 → 细胞 → 动物 → 人 → 智能 → 组织 → 经济」的直观阶梯改写成两段相连、允许分支和反馈的网络。</p>
+    <div class="svg-wrap">
+      <svg class="network-svg" viewBox="0 0 1160 430" role="img" aria-label="从微观相互作用到经济系统的跨层网络">
+        <defs>
+          <marker id="n-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#216f8f"/></marker>
+          <marker id="n-arrow-p" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" fill="#6c5795"/></marker>
+        </defs>
+        <path class="edge" d="M150 112 H188"/><path class="edge" d="M315 112 H353"/><path class="edge" d="M480 112 H518"/><path class="edge" d="M645 112 H683"/><path class="edge" d="M810 112 H848"/>
+        <path class="edge" d="M150 315 H258"/><path class="edge" d="M389 315 H497"/><path class="edge" d="M628 315 H736"/>
+        <path class="back" d="M932 348 C1010 402, 1084 360, 1084 260 C1084 205, 1014 178, 940 177"/>
+        <path class="back" d="M741 278 C700 212, 620 180, 550 176"/>
+        <text class="label" x="1016" y="220">制度、市场、技术与资源的下行反馈</text>
+        <text class="label" x="640" y="205">智能/组织也改变环境</text>
+        <g class="node matter" transform="translate(20,65)"><rect width="130" height="94"/><text x="65" y="38">夸克—胶子</text><text class="sub" x="65" y="63">量子场相互作用</text></g>
+        <g class="node matter" transform="translate(185,65)"><rect width="130" height="94"/><text x="65" y="38">强子与原子核</text><text class="sub" x="65" y="63">束缚态与稳定身份</text></g>
+        <g class="node matter" transform="translate(350,65)"><rect width="130" height="94"/><text x="65" y="38">原子</text><text class="sub" x="65" y="63">核—电子结构</text></g>
+        <g class="node matter" transform="translate(515,65)"><rect width="130" height="94"/><text x="65" y="38">分子网络</text><text class="sub" x="65" y="63">化学键与反应循环</text></g>
+        <g class="node life" transform="translate(680,65)"><rect width="130" height="94"/><text x="65" y="38">细胞</text><text class="sub" x="65" y="63">膜、代谢、复制、调节</text></g>
+        <g class="node life" transform="translate(845,65)"><rect width="130" height="94"/><text x="65" y="38">多细胞动物</text><text class="sub" x="65" y="63">分化、器官、稳态</text></g>
+        <g class="node society" transform="translate(1010,65)"><rect width="130" height="94"/><text x="65" y="38">人类支系</text><text class="sub" x="65" y="63">遗传、工具、语言、文化</text></g>
+        <g class="node society" transform="translate(20,268)"><rect width="130" height="94"/><text x="65" y="38">人类主体</text><text class="sub" x="65" y="63">神经—身体—社会系统</text></g>
+        <g class="node knowledge" transform="translate(259,268)"><rect width="130" height="94"/><text x="65" y="38">智能功能</text><text class="sub" x="65" y="63">个体、集体或人工智能</text></g>
+        <g class="node society" transform="translate(498,268)"><rect width="130" height="94"/><text x="65" y="38">组织与制度</text><text class="sub" x="65" y="63">规则、角色、资源通道</text></g>
+        <g class="node economy" transform="translate(737,268)"><rect width="130" height="94"/><text x="65" y="38">经济系统</text><text class="sub" x="65" y="63">生产、交换、信用、预期</text></g>
+      </svg>
+    </div>
+
+    <h2>四、理论自迭代八步闭环</h2>
+    <p>3.3 的核心新增不是第八条公理，而是把「理论也应具有迭代能力」变成可重复、可失败、可回退的元层协议。</p>
+    <div class="svg-wrap">
+      <svg class="loop-svg" viewBox="0 0 820 540" role="img" aria-label="理论自迭代八步闭环">
+        <defs>
+          <marker id="loop-arrow" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0,9 3.5,0 7" fill="#216f8f"/></marker>
+        </defs>
+        <ellipse class="ring" cx="410" cy="270" rx="310" ry="210"/>
+        <path class="edge" d="M300 104 C358 62, 430 62, 487 104"/>
+        <path class="edge" d="M600 145 C650 188, 672 237, 656 283"/>
+        <path class="edge" d="M623 380 C565 432, 500 455, 438 447"/>
+        <path class="edge" d="M265 417 C195 374, 157 324, 160 269"/>
+        <path class="edge" d="M179 183 C199 144, 222 124, 260 111"/>
+        <g class="node l1" transform="translate(220,57)"><rect width="190" height="76"/><text x="95" y="33">① 差异输入</text><text class="sub" x="95" y="56">批评、证据、矛盾、替代模型</text></g>
+        <g class="node l2" transform="translate(470,78)"><rect width="190" height="76"/><text x="95" y="33">② 定位层级</text><text class="sub" x="95" y="56">L0—L4，明确作用位置</text></g>
+        <g class="node l3" transform="translate(580,260)"><rect width="190" height="76"/><text x="95" y="33">③ 生成候选</text><text class="sub" x="95" y="56">保留、最小修订、分支</text></g>
+        <g class="node l4" transform="translate(360,415)"><rect width="190" height="76"/><text x="95" y="33">④ 比较检验</text><text class="sub" x="95" y="56">一致性、可追溯、可证伪</text></g>
+        <g class="node l5" transform="translate(90,350)"><rect width="190" height="76"/><text x="95" y="33">⑤ 决策与版本</text><text class="sub" x="95" y="56">接受、暂缓、否决、回退</text></g>
+        <text class="caption" x="410" y="250">Closure_T</text>
+        <text class="caption" x="410" y="278">不是自我证明，而是可审计的变化</text>
+      </svg>
+    </div>
+    <div class="detail-panel">
+      <h3>硬门槛 Gate_T</h3>
+      <p>候选版本必须同时通过五项门槛，不能用总分掩盖逻辑矛盾或证据失败。</p>
+      <div class="formula">Consistency ∧ Traceability ∧ Testability ∧ NonCircularity ∧ Versionability</div>
+      <p style="margin-top:12px;"><strong>决策项：</strong>保留 retain · 修订 revise · 分支 branch · 暂缓 suspend · 否决 reject · 回退 rollback</p>
+    </div>
+
+    <h2>五、章节脑图</h2>
+    <p>中心是「对象—实体—关系的最大包涵」，两侧展开前提、公理、引理、跨层检验和理论自迭代。</p>
+    <div class="mindmap">
+      <div class="mind-col">
+        <details class="branch" open><summary><span class="branch-no">01</span><span>前提定位</span></summary><div class="branch-detail"><ul><li>相对性：认识无法站到世界之外</li><li>平等：去除人类中心主义和对象等级偏见</li><li>过程与历史：从动态形成中理解对象</li></ul></div></details>
+        <details class="branch" open><summary><span class="branch-no">02</span><span>存在定义</span></summary><div class="branch-detail"><ul><li>Σ=(X,B,C,F,Γ)</li><li>对象、实体、关系都可进入候选域</li><li>Ex 由 β、Q、A 合取判定</li></ul></div></details>
+        <details class="branch" open><summary><span class="branch-no">03</span><span>七条公理</span></summary><div class="branch-detail"><ul><li>A1—A3：关系、身份、证据</li><li>A4—A5：有限开放与差异响应</li><li>A6—A7：关系产物与迭代保留</li></ul></div></details>
+        <details class="branch" open><summary><span class="branch-no">04</span><span>不完美与周期</span></summary><div class="branch-detail"><ul><li>有限系统不能绝对封闭和永恒维持</li><li>复现度、特征周期、惯性分别量化</li><li>频率不自动等于稳定性或惯性</li></ul></div></details>
+      </div>
+      <div class="hub"><div><strong>存在迭代论</strong><span>相互作用 · 复现 · 组织 · 迭代</span></div></div>
+      <div class="mind-col">
+        <details class="branch" open><summary><span class="branch-no">05</span><span>迭代演化</span></summary><div class="branch-detail"><ul><li>关系产物可能跨越阈值成为新存在</li><li>新层级反馈环境、边界和转移规则</li><li>竞争、合作、冲突、共生均可并生</li></ul></div></details>
+        <details class="branch" open><summary><span class="branch-no">06</span><span>跨层贯通</span></summary><div class="branch-detail"><ul><li>每条相邻边填写 M 接口</li><li>分支网络替代单线阶梯</li><li>领域变量和动力学不能被公理省略</li></ul></div></details>
+        <details class="branch" open><summary><span class="branch-no">07</span><span>理论自迭代</span></summary><div class="branch-detail"><ul><li>T₀ 描述对象，T₁ 把理论作为知识存在</li><li>差异 → 候选 → 比较 → 检验 → 决策</li><li>保留、修订、分支、暂缓、否决或回退</li></ul></div></details>
+        <details class="branch" open><summary><span class="branch-no">08</span><span>严谨边界</span></summary><div class="branch-detail"><ul><li>闭合证明过程可追溯，不证明新版本必真</li><li>没有中间桥接就只能是待研究假说</li><li>反例进入下一轮，而不是被排除</li></ul></div></details>
+      </div>
+    </div>
+
+    <h2>六、八个关键词速查</h2>
+    <div class="grid grid-4">
+      <div class="card"><b>相对性</b><p>认识的现实起点；命题必须带条件。</p></div>
+      <div class="card"><b>平等</b><p>去除人类中心主义和对象等级偏见。</p></div>
+      <div class="card"><b>过程与历史</b><p>以形成、维持、变化、终止的动态路径观察。</p></div>
+      <div class="card"><b>存在</b><p>相互作用、持续复现、具有组织的过程系统。</p></div>
+      <div class="card"><b>不完美性</b><p>有限系统非闭合，差异需要通过作用通道处理。</p></div>
+      <div class="card"><b>周期与惯性</b><p>复现快慢、组织稳定和扰动恢复是不同变量。</p></div>
+      <div class="card"><b>迭代演化</b><p>关系产物被保留、重组并形成新的层级和反馈。</p></div>
+      <div class="card"><b>理论自迭代</b><p>理论也是知识存在，必须接受证据、分支和回退。</p></div>
+    </div>
+  </section>
+
+  <!-- ============ 附录 ============ -->
+  <div class="part-banner" id="appendix"><h2>附录 · 核心符号表与参考文献</h2><p>跨章节复用符号的统一定义，以及全部参考文献。</p></div>
+
+  <section class="doc">
+    <h2 style="margin-top:0;">核心符号表</h2>
+    <table>
+      <thead><tr><th>符号</th><th>类型</th><th>统一定义与约束</th></tr></thead>
+      <tbody>
+        <tr><td>Σ^(ℓ)</td><td>系统元组</td><td>第 ℓ 层单个候选存在的系统化表示：(X,B,C,F,Γ)。</td></tr>
+        <tr><td>D_ℓ</td><td>对象集合</td><td>第 ℓ 层满足存在判据的系统集合，是桥接接口的输入域。</td></tr>
+        <tr><td>X</td><td>状态空间</td><td>单个系统 Σ 的可能状态域，不等同于对象集合 D_ℓ。</td></tr>
+        <tr><td>B</td><td>边界规则</td><td>划分系统与环境 E，并规定交换条件。</td></tr>
+        <tr><td>C / C_*</td><td>组织约束/目标集</td><td>C 是身份组织约束；C_* 是其在特征空间 Z 中的允许目标集。</td></tr>
+        <tr><td>φ_C</td><td>映射 X→Z</td><td>把系统状态映射为可比较的身份特征。</td></tr>
+        <tr><td>ρ</td><td>度量 Z×Z→[0,1]</td><td>归一化特征距离；d_C 与 R_C 共用。</td></tr>
+        <tr><td>F</td><td>状态转移规则</td><td>可依赖 x、e、Γ 及历史路径 H_t 生成下一状态。</td></tr>
+        <tr><td>Γ</td><td>作用通道/网络</td><td>内部作用、系统—环境作用与证据路径的总称。</td></tr>
+        <tr><td>E / e(t) / r</td><td>环境/环境状态/参照</td><td>E 由 B 划定；e(t) 是环境状态；r 是形成证据的特定参照系统。</td></tr>
+        <tr><td>β, Q_J, A_J</td><td>存在判据分量</td><td>分别表示边界可区分度、过程保持度和作用通道条件。</td></tr>
+        <tr><td>p</td><td>关系产物</td><td>真实作用产生的关系存在候选，不等于已形成独立系统。</td></tr>
+        <tr><td>I</td><td>迭代保留算子</td><td>把关系产物对下一轮状态、边界、组织或通道的影响写入系统。</td></tr>
+        <tr><td>M_(ℓ→ℓ+1)</td><td>桥接接口</td><td>给出 Γ、H、I、上层 B/C/F、阈值 Θ 及反馈 Ψ_down。</td></tr>
+        <tr><td>G_ℓ</td><td>层级生成算子</td><td>G_ℓ(W_ℓ,Γ_ℓ,e_ℓ) 可输出多个候选 p 或 ∅。</td></tr>
+        <tr><td>ℓ / λ</td><td>层级/观察尺度</td><td>ℓ 由生成网络派生；λ 由测量方案给定，二者不作算术混用。</td></tr>
+        <tr><td>Θ / Ψ_down</td><td>形成条件/反馈</td><td>Θ 汇总预注册阈值与时间尺度；Ψ_down 描述上层对下层的可区分作用。</td></tr>
+        <tr><td>T_n / V_n</td><td>理论状态/版本</td><td>T_n 记录前提、公理、引理、模型、证据与失败；V_n 记录可追溯的版本历史。</td></tr>
+        <tr><td>Δ_T^(n,*)</td><td>可作用理论差异</td><td>具有来源、明确作用位置且原则上可检验的差异集合。</td></tr>
+        <tr><td>I_T / Alt_n</td><td>理论修订/替代候选</td><td>I_T 执行元层更新；Alt_n 保存保留现状、最小修订和竞争分支。</td></tr>
+        <tr><td>Gate_T / Decision_T</td><td>接受门槛/版本决策</td><td>硬门槛通过后，在保留、修订、分支、暂缓、否决和回退中形成决策。</td></tr>
+      </tbody>
+    </table>
+
+    <h2>参考文献</h2>
+    <ol>
+      <li>高兆华：《存在的定义及世界统一原理》，本地稿件，2026。</li>
+      <li>毛泽东：《矛盾论》，载《毛泽东选集》第 2 版第 1 卷，北京：人民出版社，1991。</li>
+      <li>Whitehead, A. N. <em>Process and Reality: An Essay in Cosmology</em>, corrected ed., Free Press, 1978.</li>
+      <li>Simon, H. A. "The Architecture of Complexity." <em>Proceedings of the American Philosophical Society</em> 106(6), 1962.</li>
+      <li>Szathmáry, E., and J. Maynard Smith. "The Major Evolutionary Transitions." <em>Nature</em> 374, 1995.</li>
+      <li>Ganter, B., and R. Wille. <em>Formal Concept Analysis: Mathematical Foundations</em>. Springer, 1999.</li>
+      <li>Kivelä, M., et al. "Multilayer Networks." <em>Journal of Complex Networks</em> 2(3), 2014.</li>
+    </ol>
+
+    <div class="rule-strip"><strong>版本说明：</strong>本整合文档收录初稿、系统化定义版与公式化升级稿 3.3 的全部核心内容。3.3 保留原有命名、章节逻辑、存在定义、不完美性、周期性、层级生成、广义生命体和世界统一原理，并把理论自身迭代正式化为 A7 的元层实现。当前版本仍须接受领域测量、外部批评、替代模型和后续版本检验。</div>
+  </section>
+
+  <footer>
+    <p>依据：《存在的定义及世界统一原理》初稿 · 《对存在进行系统化、可计算、可迭代的定义》 · 《存在迭代的公式化升级稿 3.3》</p>
+    <p>世界仍不完美，我们将永远前进——不止于此。</p>
+  </footer>
+
+</div>
+</body>
+</html>
